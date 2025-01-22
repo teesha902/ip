@@ -6,6 +6,7 @@ public class Task {
         this.name = name;
         this.isDone = false;
     }
+
     public String status() {
         if (isDone) {
             return "X";
@@ -23,6 +24,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return name;
+        return "[" + this.status() + "] " + this.name;
     }
 }
