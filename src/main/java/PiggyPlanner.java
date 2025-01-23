@@ -1,7 +1,6 @@
 import commands.*;
 import exception.PiggyException;
 import tasks.*;
-//import tasks.Task;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -14,36 +13,50 @@ public class PiggyPlanner {
 
         while (true) {
             String userInput = reader.nextLine();
+            CommandType command = CommandType.fromString(userInput.split(" ")[0]); // Get the command type
 
             try {
-                if (userInput.equals("bye")) {
-                    break;
-                } else if (userInput.equals("list")) {
-                    printToScreen(ListCommand.execute(taskList));
+                switch (command) {
+                    case LIST:
+                        printToScreen(ListCommand.execute(taskList));
+                        break;
 
-                } else if (userInput.startsWith("mark")) {
-                    printToScreen(Mark.execute(userInput, taskList));
-                } else if (userInput.startsWith("unmark")) {
-                    printToScreen(Unmark.execute(userInput, taskList));
-                } else if (userInput.startsWith("delete")) {
-                    printToScreen(DeleteTask.execute(userInput, taskList));
+                    case MARK:
+                        printToScreen(Mark.execute(userInput, taskList));
+                        break;
 
-                } else if (userInput.startsWith("todo")) {
-                    printToScreen(AddTask.todo(userInput, taskList));
-                } else if (userInput.startsWith("deadline")) {
-                    printToScreen(AddTask.deadline(userInput, taskList));
-                } else if (userInput.startsWith("event")) {
-                    printToScreen(AddTask.event(userInput, taskList));
+                    case UNMARK:
+                        printToScreen(Unmark.execute(userInput, taskList));
+                        break;
 
-                } else {
-                    throw new PiggyException("Unfortunately, I don't know what that means. Please try again.");
+                    case TODO:
+                        printToScreen(AddTask.todo(userInput, taskList));
+                        break;
+
+                    case DEADLINE:
+                        printToScreen(AddTask.deadline(userInput, taskList));
+                        break;
+
+                    case EVENT:
+                        printToScreen(AddTask.event(userInput, taskList));
+                        break;
+
+                    case DELETE:
+                        printToScreen(DeleteTask.execute(userInput, taskList));
+                        break;
+
+                    case EXIT:
+                        printToScreen("Bye. Hope to see you again soon!");
+                        return; // Exit the program
+
+                    case UNKNOWN:
+                    default:
+                        throw new PiggyException("Unfortunately, I don't know what that means. Please try again.");
                 }
             } catch (PiggyException e) {
                 printToScreen(e.getMessage());
             }
         }
-
-        System.out.println("Bye. Hope to see you again soon!");
     }
 
     public static void printToScreen(String txt) {
