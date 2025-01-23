@@ -1,3 +1,5 @@
+package tasks;
+
 public class Deadline extends Task{
     //tasks that need to be done before a specific date/time
     protected String due;

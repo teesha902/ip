@@ -1,3 +1,5 @@
+package tasks;
+
 public class Event extends Task{
     // tasks that start at a specific date/time and ends at a specific date/time
     protected String  start;
