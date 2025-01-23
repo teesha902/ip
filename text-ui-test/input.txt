@@ -1,4 +1,6 @@
 list
+delete 1
+delete a
 todo
 todo homework
 deadline
@@ -17,5 +19,7 @@ mark 2
 mark 2
 unmark 1
 unmark 2
+delete 3
 hi
+delete 1
 bye

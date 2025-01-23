@@ -25,6 +25,8 @@ public class PiggyPlanner {
                     printToScreen(Mark.execute(userInput, taskList));
                 } else if (userInput.startsWith("unmark")) {
                     printToScreen(Unmark.execute(userInput, taskList));
+                } else if (userInput.startsWith("delete")) {
+                    printToScreen(DeleteTask.execute(userInput, taskList));
 
                 } else if (userInput.startsWith("todo")) {
                     printToScreen(AddTask.todo(userInput, taskList));

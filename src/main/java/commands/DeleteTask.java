@@ -4,25 +4,23 @@ import tasks.Task;
 import exception.PiggyException;
 import java.util.ArrayList;
 
-public class Mark {
+public class DeleteTask {
     public static String execute(String index, ArrayList<Task> taskList) throws PiggyException {
         try {
             int taskIndex = Integer.parseInt(index.split(" ")[1]) - 1;
             if (taskIndex < 0 || taskIndex >= taskList.size()) {
-                throw new PiggyException("You need to mark something actually IN the list, silly");
+                throw new PiggyException("You need to pick a task to delete that is actually IN the list, silly");
             }
-
             Task currTask = taskList.get(taskIndex);
+            taskList.remove(taskIndex);
 
-            // Check if the task is already marked
-            if (currTask.status().equals("X")) {
-                return "The task is already marked.";
+            // Return success message
+            if (taskList.size() == 1) {
+                return "Phew! We got ride of " + currTask +
+                        "\nNow you only have 1 task to worry about.";
             } else {
-                // Mark the task and return success message
-                currTask.mark();
-
-                return "Good work! Let's keep going." +
-                        "\nI've marked this task as done:\n  " + currTask;
+                return "Phew! We got ride of " + currTask +
+                        "\nNow you have " + taskList.size() + " tasks to worry about.";
             }
 
         } catch (NumberFormatException e) {
@@ -30,4 +28,3 @@ public class Mark {
         }
     }
 }
-
