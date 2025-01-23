@@ -7,17 +7,21 @@ import java.util.ArrayList;
 public class AddTask {
 
     public static String todo(String userInput, ArrayList<Task> taskList) throws PiggyException {
+        if (userInput.length() <= 5) {
+            throw new PiggyException("You forgot to mention what the task is.");
+        }
         String taskName = userInput.substring(5).trim();
         validateNonEmpty(taskName, "You forgot to mention what the task is.");
-
         // Add the task to the task list
         Task newTask = new ToDo(taskName);
         taskList.add(newTask);
         // Return success message
         return taskAddedMsg(newTask, taskList.size());
-
     }
     public static String deadline(String userInput, ArrayList<Task> taskList) throws PiggyException {
+        if (!userInput.contains("/by")) {
+            throw new PiggyException("You forgot to mention when the task is due.");
+        }
         int dueDateIndex = userInput.indexOf("/by");
         if (dueDateIndex == -1) {
             throw new PiggyException("You forgot to mention when the task is due");
@@ -36,6 +40,9 @@ public class AddTask {
 
     }
     public static String event(String userInput, ArrayList<Task> taskList) throws PiggyException {
+        if (!userInput.contains("/from") || !userInput.contains("/to")) {
+            throw new PiggyException("You forgot to mention when the event starts/ends.");
+        }
         int fromIndex = userInput.indexOf("/from");
         int toIndex = userInput.indexOf("/to");
         if (fromIndex == -1 || toIndex == -1) {
@@ -70,12 +77,12 @@ public class AddTask {
         // Create the message based on the total number of tasks
         String taskCountMessage;
         if (totalTasks == 1) {
-            taskCountMessage = "Now you have 1 task in the list.";
+            taskCountMessage = "Now we have 1 task in the list.";
         } else {
-            taskCountMessage = "Now you have " + totalTasks + " tasks in the list.";
+            taskCountMessage = "Now we have " + totalTasks + " tasks in the list.";
         }
         // Return the final success message
-        return "New task incoming! I've added it to our list :) :\n  " + task + "\n" + taskCountMessage;
+        return "New task incoming! I've added it to our list :)\n  " + task + "\n" + taskCountMessage;
     }
 }
 

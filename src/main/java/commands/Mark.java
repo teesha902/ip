@@ -20,12 +20,12 @@ public class Mark {
             } else {
                 // Mark the task and return success message
                 currTask.mark();
-                return " Good work! Let's keep going." +
-                        "\n I've marked this task as done:\n  " + currTask;
+                return "Good work! Let's keep going." +
+                        "\nI've marked this task as done:\n  " + currTask;
             }
 
         } catch (NumberFormatException e) {
-            throw new PiggyException("Invalid input. You need to pick an index number to mark in the list./n You can try again.");
+            throw new PiggyException("You need to pick an index number to mark in the list. You can try again.");
         }
     }
 }

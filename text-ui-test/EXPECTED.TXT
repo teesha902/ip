@@ -1,50 +1,78 @@
 ____________________________________________________________
- Hello! I'm you PiggyPlanner
- What shall we do today?
+Hi! I'm your PiggyPlanner
+What shall we complete today?
 ____________________________________________________________
 ____________________________________________________________
-New task! I've added it to the list :)
-  [T][ ] read book
-Now we have a total of 1 things to do.
+You have no tasks at the moment.
 ____________________________________________________________
 ____________________________________________________________
-New task! I've added it to the list :)
-  [D][ ] return book (by: Sunday)
-Now we have a total of 2 things to do.
+You forgot to mention what the task is.
 ____________________________________________________________
 ____________________________________________________________
-New task! I've added it to the list :)
-  [E][ ] project meeting (from: Mon 2pm to: 4pm)
-Now we have a total of 3 things to do.
+New task incoming! I've added it to our list :)
+  [T][ ] homework
+Now we have 1 task in the list.
+____________________________________________________________
+____________________________________________________________
+You forgot to mention when the task is due.
+____________________________________________________________
+____________________________________________________________
+You forgot to mention when the task is due.
+____________________________________________________________
+____________________________________________________________
+You forgot to mention what the task is.
+____________________________________________________________
+____________________________________________________________
+New task incoming! I've added it to our list :)
+  [D][ ] hw (by: tonight)
+Now we have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+You forgot to mention when the event starts/ends.
+____________________________________________________________
+____________________________________________________________
+You forgot to mention when the event starts/ends.
+____________________________________________________________
+____________________________________________________________
+You forgot to mention what the event is.
+____________________________________________________________
+____________________________________________________________
+New task incoming! I've added it to our list :)
+  [E][ ] class (from: 4 to: 6)
+Now we have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
 To-do list:
-1.[T][ ] read book
-2.[D][ ] return book (by: Sunday)
-3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+1. [T][ ] homework
+2. [D][ ] hw (by: tonight)
+3. [E][ ] class (from: 4 to: 6)
 ____________________________________________________________
 ____________________________________________________________
- Good work! Let's keep going.
- I've marked this task as done:
-  [X] [T][X] read book
+You need to pick an index number to mark in the list. You can try again.
 ____________________________________________________________
 ____________________________________________________________
-To-do list:
-1.[T][X] read book
-2.[D][ ] return book (by: Sunday)
-3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+You need to pick an index number to unmark in the list. You can try again.
 ____________________________________________________________
 ____________________________________________________________
- Oops, no problem.
- I've unmarked the task:
-  [ ] [T][ ] read book
+You need to mark something actually IN the list, silly
 ____________________________________________________________
 ____________________________________________________________
-To-do list:
-1.[T][ ] read book
-2.[D][ ] return book (by: Sunday)
-3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+Good work! Let's keep going.
+I've marked this task as done:
+  [D][X] hw (by: tonight)
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+The task is already marked.
 ____________________________________________________________
+____________________________________________________________
+The task is already unmarked.
+____________________________________________________________
+____________________________________________________________
+Oops, no problem.
+I've unmarked the task:
+  [D][ ] hw (by: tonight)
+____________________________________________________________
+____________________________________________________________
+Unfortunately, I don't know what that means. Please try again.
+____________________________________________________________
+Bye. Hope to see you again soon!
