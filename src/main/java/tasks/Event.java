@@ -11,6 +11,13 @@ public class Event extends Task{
         this.end = end;
     }
 
+    public Event(String name, String start, String end, boolean isDone) {
+        super(name);
+        this.start = start;
+        this.end = end;
+        this.isDone = isDone;
+    }
+
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + start + " to: " + end + ")";
