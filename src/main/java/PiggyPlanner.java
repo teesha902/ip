@@ -1,22 +1,23 @@
 import commands.CommandType;
 import commands.AddTask;
-import commands.ListCommand;
-import commands.Unmark;
-import commands.Mark;
 import commands.DeleteTask;
+import commands.ListCommand;
+import commands.Mark;
+import commands.Unmark;
 import exception.PiggyException;
 import tasks.Task;
 import tasks.Deadline;
 import tasks.Event;
 import tasks.ToDo;
+import storage.Storage;
 
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class PiggyPlanner {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws PiggyException {
         printToScreen("Hi! I'm your PiggyPlanner\nWhat shall we complete today?");
-        ArrayList<Task> taskList = new ArrayList<>();
+        ArrayList<Task> taskList = Storage.loadList();
         Scanner reader = new Scanner(System.in);
 
         while (true) {
@@ -31,26 +32,32 @@ public class PiggyPlanner {
 
                     case MARK:
                         printToScreen(Mark.execute(userInput, taskList));
+                        Storage.updateList(taskList);
                         break;
 
                     case UNMARK:
                         printToScreen(Unmark.execute(userInput, taskList));
+                        Storage.updateList(taskList);
                         break;
 
                     case TODO:
                         printToScreen(AddTask.todo(userInput, taskList));
+                        Storage.updateList(taskList);
                         break;
 
                     case DEADLINE:
                         printToScreen(AddTask.deadline(userInput, taskList));
+                        Storage.updateList(taskList);
                         break;
 
                     case EVENT:
                         printToScreen(AddTask.event(userInput, taskList));
+                        Storage.updateList(taskList);
                         break;
 
                     case DELETE:
                         printToScreen(DeleteTask.execute(userInput, taskList));
+                        Storage.updateList(taskList);
                         break;
 
                     case EXIT:
@@ -65,6 +72,8 @@ public class PiggyPlanner {
                 printToScreen(e.getMessage());
             }
         }
+
+        //send date to storage
     }
 
     public static void printToScreen(String txt) {
