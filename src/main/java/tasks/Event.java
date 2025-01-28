@@ -13,11 +13,13 @@ public class Event extends Task{
     private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy, h:mma");
 
+    /*
     public Event(String name, String start, String end) {
         super(name);
         this.start = LocalDateTime.parse(start, INPUT_FORMATTER);
         this.end = LocalDateTime.parse(end, INPUT_FORMATTER);
     }
+    */
 
     public Event(String name, LocalDateTime start, LocalDateTime end) {
         super(name);

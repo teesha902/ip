@@ -12,10 +12,12 @@ public class Deadline extends Task{
     private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy, h:mma");
     //EEEE → Full day name and h:mma → 12-hour format with AM/PM
 
+    /*
     public Deadline(String name, String dueDate) {
         super(name);
         this.dueDate = LocalDateTime.parse(dueDate, INPUT_FORMATTER); // Convert input string to LocalDateTime
     }
+    */
 
     public Deadline(String name, LocalDateTime dueDate) {
         super(name);

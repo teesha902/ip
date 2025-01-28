@@ -12,6 +12,8 @@ import java.io.BufferedReader; //read data source file (line by line) - input ne
 import java.io.FileReader; // reads file contents (char by char)
 import java.io.BufferedWriter; //read data source file (line by line) - input needs to be wrapped by FileReader
 import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 //FORMAT: [status] | [TYPE: name] | [deadline OR start-end OR "-"]
 public class Storage {
@@ -40,6 +42,7 @@ public class Storage {
     public static ArrayList<Task> loadList() throws PiggyException {
         ArrayList<Task> taskList = new ArrayList<>();
         ensureFileExists();
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String currLine;
@@ -60,35 +63,35 @@ public class Storage {
                     continue;
                 }
                 String[] typeSplit = typeAndName.split(":");
-                //String type = typeAndName.split(":")[0].trim(); // Extract type - 1st char only
                 if (typeSplit.length < 2) {
                     System.out.println("Warning: Skipping invalid task format - " + currLine);
                     continue;
                 }
                 String type = typeSplit[0].trim();
                 String description = typeSplit[1].trim();
-                //String description = typeAndName.split(":")[1].trim();
                 String timeInfo = taskParts[2].trim(); // Extract any time info
 
                 Task currTask;
                 if (type.equals("T")) {
                     currTask = new ToDo(description, isDone);
                 } else if (type.equals("D")) {
-                    if (!timeInfo.startsWith("by: ")) {
+                    try {
+                        LocalDateTime by = LocalDateTime.parse(timeInfo.substring(4).trim(), inputFormatter);
+                        currTask = new Deadline(description, by, isDone);
+                    } catch (Exception e) {
                         System.out.println("Warning: Skipping invalid deadline format - " + currLine);
                         continue;
                     }
-                    String by = timeInfo.substring(4).trim(); // Extract the deadline
-                    currTask = new Deadline(description, by, isDone);
                 } else if (type.equals("E")) { // Event
-                    if (!timeInfo.startsWith("from: ") || !timeInfo.contains(", to: ")) {
+                    try {
+                        String[] eventParts = timeInfo.split(", to: ");
+                        LocalDateTime from = LocalDateTime.parse(eventParts[0].substring(6).trim(), inputFormatter);
+                        LocalDateTime to = LocalDateTime.parse(eventParts[1].trim(), inputFormatter);
+                        currTask = new Event(description, from, to, isDone);
+                    } catch (Exception e) {
                         System.out.println("Warning: Skipping invalid event format - " + currLine);
                         continue;
                     }
-                    String[] eventParts = timeInfo.split(", to: ");
-                    String from = eventParts[0].substring(6).trim(); // Extract start time
-                    String to = eventParts[1].trim(); // Extract end time
-                    currTask = new Event(description, from, to, isDone);
                 } else {
                     throw new PiggyException("Unknown task type in file: " + type);
                 }
@@ -103,6 +106,7 @@ public class Storage {
     //updateList: update list as items are added/deleted/marked/unmarked/
     public static void updateList(ArrayList<Task> taskList) throws PiggyException {
         ensureFileExists(); // Make sure the file exists before writing
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
         File originalFile = new File(FILE_PATH);
         File backupFile = new File(FILE_PATH + ".bak");
@@ -116,23 +120,22 @@ public class Storage {
             for (Task task : taskList) {
                 String status = task.status();
                 String type;
+                String timeInfo = "--"; // Default for ToDo tasks
+
                 if (task instanceof ToDo) {
                     type = "T";
                 } else if (task instanceof Deadline) {
                     type = "D";
+                    LocalDateTime dueDate = ((Deadline) task).getDueDate();
+                    timeInfo = "by: " + dueDate.format(outputFormatter);
                 } else {
                     type = "E";
+                    LocalDateTime startTime = ((Event) task).getStart();
+                    LocalDateTime endTime = ((Event) task).getEnd();
+                    timeInfo = "from: " + startTime.format(outputFormatter) + ", to: " + endTime.format(outputFormatter);
                 }
+
                 String name = task.toString().split("] ")[1]; // Extract name from task's toString()
-                String timeInfo = "--"; // Default for ToDo tasks
-
-                if (task instanceof Deadline) {
-                    timeInfo = "by: " + ((Deadline) task).getDue(); // Deadline time info
-                } else if (task instanceof Event) {
-                    timeInfo = "from: " + ((Event) task).getStart() + ", to: " + ((Event) task).getEnd(); // Event time info
-                }
-
-                // Write formatted task to output file
                 writer.write(status + " | " + type + ": " + name + " | " + timeInfo);
                 writer.newLine(); // Move to next line
             }
