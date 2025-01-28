@@ -19,6 +19,12 @@ public class Event extends Task{
         this.end = LocalDateTime.parse(end, INPUT_FORMATTER);
     }
 
+    public Event(String name, LocalDateTime start, LocalDateTime end) {
+        super(name);
+        this.start = start;
+        this.end = end;
+    }
+
     public Event(String name, LocalDateTime start, LocalDateTime end, boolean isDone) {
         super(name);
         this.start = start;

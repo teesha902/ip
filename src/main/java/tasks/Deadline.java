@@ -17,6 +17,11 @@ public class Deadline extends Task{
         this.dueDate = LocalDateTime.parse(dueDate, INPUT_FORMATTER); // Convert input string to LocalDateTime
     }
 
+    public Deadline(String name, LocalDateTime dueDate) {
+        super(name);
+        this.dueDate = dueDate;
+    }
+
     public Deadline(String name, LocalDateTime dueDate, boolean isDone) {
         super(name);
         //this.due = due;

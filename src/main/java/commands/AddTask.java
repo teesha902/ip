@@ -6,8 +6,11 @@ import tasks.Event;
 import tasks.ToDo;
 import exception.PiggyException;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AddTask {
+    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
     public static String todo(String userInput, ArrayList<Task> taskList) throws PiggyException {
         if (userInput.length() <= 5) {
@@ -31,17 +34,20 @@ public class AddTask {
         }
 
         String taskName = userInput.substring(9, dueDateIndex).trim();
-        String dueDate = userInput.substring(dueDateIndex + 3).trim();
+        String dueDateStr = userInput.substring(dueDateIndex + 3).trim();
         validateNonEmpty(taskName, "You forgot to mention what the task is.");
-        validateNonEmpty(dueDate, "You forgot to mention when the deadline it.");
+        validateNonEmpty(dueDateStr, "You forgot to mention when the deadline it.");
 
-        // Add the task to the task list
-        Task newTask = new Deadline(taskName, dueDate);
-        taskList.add(newTask);
-        // Return success message
-        return taskAddedMsg(newTask, taskList.size());
-
+        try {
+            LocalDateTime dueDate = LocalDateTime.parse(dueDateStr, INPUT_FORMATTER); // New: Convert String to LocalDateTime
+            Task newTask = new Deadline(taskName, dueDate);
+            taskList.add(newTask);
+            return taskAddedMsg(newTask, taskList.size());
+        } catch (Exception e) {
+            throw new PiggyException("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).");
+        }
     }
+
     public static String event(String userInput, ArrayList<Task> taskList) throws PiggyException {
         if (!userInput.contains("/from") || !userInput.contains("/to")) {
             throw new PiggyException("You forgot to mention when the event starts/ends.");
@@ -54,18 +60,23 @@ public class AddTask {
 
         // Extract the task details
         String taskName = userInput.substring(6, fromIndex).trim();
-        String startTime = userInput.substring(fromIndex + 5, toIndex).trim();
-        String endTime = userInput.substring(toIndex + 3).trim();
+        String startTimeStr = userInput.substring(fromIndex + 5, toIndex).trim();
+        String endTimeStr = userInput.substring(toIndex + 3).trim();
         //.trim() - only removes extra spaces at the beginning/end - not inside phrase
         validateNonEmpty(taskName, "You forgot to mention what the event is.");
-        validateNonEmpty(startTime, "You forgot to mention when the event starts.");
-        validateNonEmpty(endTime, "You forgot to mention when the event ends.");
+        validateNonEmpty(startTimeStr, "You forgot to mention when the event starts.");
+        validateNonEmpty(endTimeStr, "You forgot to mention when the event ends.");
 
-        // Add the task to the task list
-        Task newTask = new Event(taskName, startTime, endTime);
-        taskList.add(newTask);
-        // Return success message
-        return taskAddedMsg(newTask, taskList.size());
+        try {
+            LocalDateTime startTime = LocalDateTime.parse(startTimeStr, INPUT_FORMATTER);
+            LocalDateTime endTime = LocalDateTime.parse(endTimeStr, INPUT_FORMATTER);
+            Task newTask = new Event(taskName, startTime, endTime);
+            taskList.add(newTask);
+            return taskAddedMsg(newTask, taskList.size());
+        } catch (Exception e) {
+            throw new PiggyException("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).");
+        }
+        
     }
 
     // Helper method to validate non-empty input
