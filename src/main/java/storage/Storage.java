@@ -43,30 +43,55 @@ public class Storage {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String currLine;
+
             while ((currLine = reader.readLine()) != null) {
                 String[] taskParts = currLine.split(" \\| ");
+
+                if (taskParts.length < 3) {
+                    System.out.println("Warning: Skipping corrupted entry - " + currLine);
+                    continue; // Skip this line
+                }
+
                 String status = taskParts[0].trim();
                 boolean isDone = status.equals("X"); // "X" means done
                 String typeAndName = taskParts[1].trim();
-                String type = typeAndName.split(":")[0].trim(); // Extract type - 1st char only
-                String description = typeAndName.split(":")[1].trim();
+                if (!typeAndName.contains(":")) {
+                    System.out.println("Warning: Skipping malformed task entry - " + currLine);
+                    continue;
+                }
+                String[] typeSplit = typeAndName.split(":");
+                //String type = typeAndName.split(":")[0].trim(); // Extract type - 1st char only
+                if (typeSplit.length < 2) {
+                    System.out.println("Warning: Skipping invalid task format - " + currLine);
+                    continue;
+                }
+                String type = typeSplit[0].trim();
+                String description = typeSplit[1].trim();
+                //String description = typeAndName.split(":")[1].trim();
                 String timeInfo = taskParts[2].trim(); // Extract any time info
 
                 Task currTask;
                 if (type.equals("T")) {
                     currTask = new ToDo(description, isDone);
                 } else if (type.equals("D")) {
-                    String by = timeInfo.substring(4).trim(); // Extract the deadline (after "by: ")
+                    if (!timeInfo.startsWith("by: ")) {
+                        System.out.println("Warning: Skipping invalid deadline format - " + currLine);
+                        continue;
+                    }
+                    String by = timeInfo.substring(4).trim(); // Extract the deadline
                     currTask = new Deadline(description, by, isDone);
                 } else if (type.equals("E")) { // Event
+                    if (!timeInfo.startsWith("from: ") || !timeInfo.contains(", to: ")) {
+                        System.out.println("Warning: Skipping invalid event format - " + currLine);
+                        continue;
+                    }
                     String[] eventParts = timeInfo.split(", to: ");
-                    String from = eventParts[0].substring(6).trim(); // Extract the start time (after "from: ")
-                    String to = eventParts[1].trim(); // Extract the end time (after ", to: ")
+                    String from = eventParts[0].substring(6).trim(); // Extract start time
+                    String to = eventParts[1].trim(); // Extract end time
                     currTask = new Event(description, from, to, isDone);
                 } else {
                     throw new PiggyException("Unknown task type in file: " + type);
                 }
-
                 taskList.add(currTask);
             }
         } catch (Exception e) {
@@ -78,6 +103,14 @@ public class Storage {
     //updateList: update list as items are added/deleted/marked/unmarked/
     public static void updateList(ArrayList<Task> taskList) throws PiggyException {
         ensureFileExists(); // Make sure the file exists before writing
+
+        File originalFile = new File(FILE_PATH);
+        File backupFile = new File(FILE_PATH + ".bak");
+
+        // Backup previous valid file
+        if (originalFile.exists()) {
+            originalFile.renameTo(backupFile);
+        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Task task : taskList) {
@@ -104,7 +137,16 @@ public class Storage {
                 writer.newLine(); // Move to next line
             }
         } catch (Exception e) {
+            // Restore from backup if writing fails
+            if (backupFile.exists()) {
+                backupFile.renameTo(originalFile);
+            }
             throw new PiggyException("An error occurred while updating the taskList: " + e.getMessage());
+        } finally {
+            // Delete backup file after successful save
+            if (backupFile.exists()) {
+                backupFile.delete();
+            }
         }
     }
 
