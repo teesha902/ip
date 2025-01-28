@@ -18,6 +18,14 @@ public class Event extends Task{
         this.isDone = isDone;
     }
 
+    public String getStart() {
+        return start;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + start + " to: " + end + ")";

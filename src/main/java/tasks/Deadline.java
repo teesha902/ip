@@ -15,6 +15,10 @@ public class Deadline extends Task{
         this.isDone = isDone;
     }
 
+    public String getDue() {
+        return due;
+    }
+
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + due + ")";
