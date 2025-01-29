@@ -7,19 +7,24 @@ import commands.Unmark;
 import commands.DayPlan;
 import exception.PiggyException;
 import tasks.Task;
-import tasks.Deadline;
-import tasks.Event;
-import tasks.ToDo;
 import storage.Storage;
+import ui.Ui;
+import tasks.TaskList;
 
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class PiggyPlanner {
-    public static void main(String[] args) throws PiggyException {
-        printToScreen("Hi! I'm your PiggyPlanner\nWhat shall we complete today?");
-        ArrayList<Task> taskList = Storage.loadList();
-        Scanner reader = new Scanner(System.in);
+    private final TaskList taskList;
+    private final Scanner reader;
+
+    public PiggyPlanner() throws PiggyException {
+        this.taskList = new TaskList(Storage.loadList());
+        this.reader = new Scanner(System.in);
+    }
+
+    public void run() {
+        Ui.showWelcomeMessage();
 
         while (true) {
             String userInput = reader.nextLine();
@@ -28,45 +33,45 @@ public class PiggyPlanner {
             try {
                 switch (command) {
                     case LIST:
-                        printToScreen(ListCommand.execute(taskList));
+                        Ui.showMessage(ListCommand.execute(taskList.getAllTasks()));
                         break;
 
                     case MARK:
-                        printToScreen(Mark.execute(userInput, taskList));
-                        Storage.updateList(taskList);
+                        Ui.showMessage(Mark.execute(userInput, taskList.getAllTasks()));
+                        Storage.updateList(taskList.getAllTasks());
                         break;
 
                     case UNMARK:
-                        printToScreen(Unmark.execute(userInput, taskList));
-                        Storage.updateList(taskList);
+                        Ui.showMessage(Unmark.execute(userInput, taskList.getAllTasks()));
+                        Storage.updateList(taskList.getAllTasks());
                         break;
 
                     case TODO:
-                        printToScreen(AddTask.todo(userInput, taskList));
-                        Storage.updateList(taskList);
+                        Ui.showMessage(AddTask.todo(userInput, taskList.getAllTasks()));
+                        Storage.updateList(taskList.getAllTasks());
                         break;
 
                     case DEADLINE:
-                        printToScreen(AddTask.deadline(userInput, taskList));
-                        Storage.updateList(taskList);
+                        Ui.showMessage(AddTask.deadline(userInput, taskList.getAllTasks()));
+                        Storage.updateList(taskList.getAllTasks());
                         break;
 
                     case EVENT:
-                        printToScreen(AddTask.event(userInput, taskList));
-                        Storage.updateList(taskList);
+                        Ui.showMessage(AddTask.event(userInput, taskList.getAllTasks()));
+                        Storage.updateList(taskList.getAllTasks());
                         break;
 
                     case DELETE:
-                        printToScreen(DeleteTask.execute(userInput, taskList));
-                        Storage.updateList(taskList);
+                        Ui.showMessage(DeleteTask.execute(userInput, taskList.getAllTasks()));
+                        Storage.updateList(taskList.getAllTasks());
                         break;
 
                     case DAYPLAN:
-                        printToScreen(DayPlan.execute(userInput, taskList));
+                        Ui.showMessage(DayPlan.execute(userInput, taskList.getAllTasks()));
                         break;
 
                     case EXIT:
-                        printToScreen("Bye. Hope to see you again soon!");
+                        Ui.showExitMessage();
                         return; // Exit the program
 
                     case UNKNOWN:
@@ -74,14 +79,16 @@ public class PiggyPlanner {
                         throw new PiggyException("Unfortunately, I don't know what that means. Please try again.");
                 }
             } catch (PiggyException e) {
-                printToScreen(e.getMessage());
+                Ui.showMessage(e.getMessage());
             }
         }
     }
 
-    public static void printToScreen(String txt) {
-        System.out.println("____________________________________________________________");
-        System.out.println(txt);
-        System.out.println("____________________________________________________________");
+    public static void main(String[] args) {
+        try {
+            new PiggyPlanner().run();
+        } catch (PiggyException e) {
+            System.out.println("An error occurred while starting the program: " + e.getMessage());
+        }
     }
 }
