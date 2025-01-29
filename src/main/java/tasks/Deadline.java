@@ -19,7 +19,6 @@ public class Deadline extends Task{
 
     public Deadline(String name, LocalDateTime dueDate, boolean isDone) {
         super(name);
-        //this.due = due;
         this.dueDate = dueDate;
         this.isDone = isDone;
     }
@@ -29,7 +28,8 @@ public class Deadline extends Task{
     }
 
     public String getTime() {
-        return "due at: " + dueDate.format(TIME_FORMATTER).toLowerCase();
+        return dueDate.format(TIME_FORMATTER).toLowerCase();
+        //return "due at: " + dueDate.format(TIME_FORMATTER).toLowerCase();
     }
 
     @Override

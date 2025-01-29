@@ -25,7 +25,7 @@ public class Task {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @Override

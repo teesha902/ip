@@ -1,5 +1,7 @@
 package tasks;
 
+import exception.PiggyException;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
@@ -14,19 +16,19 @@ public class Event extends Task{
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy");
 
 
-    public Event(String name, LocalDateTime start, LocalDateTime end) {
+    public Event(String name, LocalDateTime start, LocalDateTime end) throws PiggyException{
         super(name);
         if (!isValidTimeRange(start, end)) {
-            throw new IllegalArgumentException("Event start time must be before end time.");
+            throw new PiggyException("Event start time must be before end time.");
         }
         this.start = start;
         this.end = end;
     }
 
-    public Event(String name, LocalDateTime start, LocalDateTime end, boolean isDone) {
+    public Event(String name, LocalDateTime start, LocalDateTime end, boolean isDone) throws PiggyException {
         super(name);
         if (!isValidTimeRange(start, end)) {
-            throw new IllegalArgumentException("Event start time must be before end time.");
+            throw new PiggyException("Event start time must be before end time.");
         }
         this.start = start;
         this.end = end;
@@ -50,7 +52,7 @@ public class Event extends Task{
     }
 
     public String getDates() {
-        return "starting on: " + start.format(DATE_FORMATTER) + ", till: " + end.format(DATE_FORMATTER);
+        return "from: " + start.format(DATE_FORMATTER) + ", to: " + end.format(DATE_FORMATTER);
     }
 
     @Override

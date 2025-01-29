@@ -74,7 +74,8 @@ public class AddTask {
             taskList.add(newTask);
             return taskAddedMsg(newTask, taskList.size());
         } catch (Exception e) {
-            throw new PiggyException("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).");
+            throw new PiggyException("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).\n" +
+                    "Or check that the start time is before the end time:");
         }
 
     }
