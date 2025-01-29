@@ -1,7 +1,7 @@
 package tasks;
 
 public class Task {
-    protected String name;
+    protected final String name;
     protected boolean isDone;
 
     public Task(String name) {
@@ -22,6 +22,10 @@ public class Task {
 
     public void unmark() {
         isDone = false;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

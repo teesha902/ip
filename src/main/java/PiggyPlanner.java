@@ -4,6 +4,7 @@ import commands.DeleteTask;
 import commands.ListCommand;
 import commands.Mark;
 import commands.Unmark;
+import commands.DayPlan;
 import exception.PiggyException;
 import tasks.Task;
 import tasks.Deadline;
@@ -60,6 +61,10 @@ public class PiggyPlanner {
                         Storage.updateList(taskList);
                         break;
 
+                    case DAYPLAN:
+                        printToScreen(DayPlan.execute(userInput, taskList));
+                        break;
+
                     case EXIT:
                         printToScreen("Bye. Hope to see you again soon!");
                         return; // Exit the program
@@ -72,8 +77,6 @@ public class PiggyPlanner {
                 printToScreen(e.getMessage());
             }
         }
-
-        //send date to storage
     }
 
     public static void printToScreen(String txt) {
