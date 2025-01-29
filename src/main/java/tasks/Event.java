@@ -16,15 +16,25 @@ public class Event extends Task{
 
     public Event(String name, LocalDateTime start, LocalDateTime end) {
         super(name);
+        if (!isValidTimeRange(start, end)) {
+            throw new IllegalArgumentException("Event start time must be before end time.");
+        }
         this.start = start;
         this.end = end;
     }
 
     public Event(String name, LocalDateTime start, LocalDateTime end, boolean isDone) {
         super(name);
+        if (!isValidTimeRange(start, end)) {
+            throw new IllegalArgumentException("Event start time must be before end time.");
+        }
         this.start = start;
         this.end = end;
         this.isDone = isDone;
+    }
+
+    private static boolean isValidTimeRange(LocalDateTime start, LocalDateTime end) {
+        return start.isBefore(end); // Ensures start is earlier than end
     }
 
     public LocalDateTime getStart() {
