@@ -9,7 +9,7 @@ public class Mark {
         try {
             int taskIndex = Integer.parseInt(index.split(" ")[1]) - 1;
             if (taskIndex < 0 || taskIndex >= taskList.size()) {
-                throw new PiggyException("You need to mark something actually IN the list, silly");
+                throw new PiggyException("You need to mark something actually in the list, silly");
             }
 
             Task currTask = taskList.get(taskIndex);

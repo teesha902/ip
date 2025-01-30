@@ -9,7 +9,7 @@ public class Unmark {
         try {
             int taskIndex = Integer.parseInt(index.split(" ")[1]) - 1;
             if (taskIndex < 0 || taskIndex >= taskList.size()) {
-                throw new PiggyException("You need to unmark something actually IN the list, silly");
+                throw new PiggyException("You need to unmark something actually in the list, silly");
             }
 
             Task currTask = taskList.get(taskIndex);

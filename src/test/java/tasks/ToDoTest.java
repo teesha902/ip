@@ -1,4 +1,4 @@
-package tasks;  //same package as the class being tested
+package tasks;
 
 import org.junit.jupiter.api.Test;
 

@@ -24,6 +24,7 @@ public class AddTask {
         // Return success message
         return taskAddedMsg(newTask, taskList.size());
     }
+
     public static String deadline(String userInput, ArrayList<Task> taskList) throws PiggyException {
         if (!userInput.contains("/by")) {
             throw new PiggyException("You forgot to mention when the task is due.");
@@ -97,7 +98,7 @@ public class AddTask {
             taskCountMessage = "Now we have " + totalTasks + " tasks in the list.";
         }
         // Return the final success message
-        return "New task incoming! I've added it to our list :)\n  " + task + "\n" + taskCountMessage;
+        return "New task incoming! I've added it to our list :)\n " + task + "\n" + taskCountMessage;
     }
 }
 

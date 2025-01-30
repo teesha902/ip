@@ -28,9 +28,13 @@ public class PiggyPlanner {
 
         while (true) {
             String userInput = reader.nextLine();
-            CommandType command = CommandType.fromString(userInput.split(" ")[0]); // Get the command type
+            String[] inputParts = userInput.split(" "); // Split into command + arguments
+            CommandType command = CommandType.fromString(inputParts[0]);
+
 
             try {
+                validateArguments(command, inputParts); //validate input format before execution
+
                 switch (command) {
                     case LIST:
                         Ui.showMessage(ListCommand.execute(taskList.getAllTasks()));
@@ -83,6 +87,56 @@ public class PiggyPlanner {
             }
         }
     }
+
+    private void validateArguments(CommandType command, String[] inputParts) throws PiggyException {
+        int argLength = inputParts.length; // Check number of arguments
+
+        switch (command) {
+            case LIST:
+            case EXIT:
+                if (argLength != 1) {
+                    throw new PiggyException("The '" + command.toString().toLowerCase() + "' command does not take any arguments.");
+                }
+                break;
+
+            case MARK:
+            case UNMARK:
+            case DELETE:
+                if (argLength != 2) {
+                    throw new PiggyException("The '" + command.toString().toLowerCase() + "' command requires exactly one task number.");
+                }
+                break;
+
+            case TODO:
+                if (argLength != 2) {
+                    throw new PiggyException("The 'todo' command requires a task description.");
+                }
+                break;
+
+            case DEADLINE:
+                if (argLength < 2 || !inputParts[1].contains("/by")) {
+                    throw new PiggyException("The 'deadline' command requires a task description and a due date. Format: deadline <task> /by <d/M/yyyy HHmm>");
+                }
+                break;
+
+            case EVENT:
+                if (argLength < 2 || !inputParts[1].contains("/from") || !inputParts[1].contains("/to")) {
+                    throw new PiggyException("The 'event' command requires a task description, start date, and end date. Format: event <task> /from <d/M/yyyy HHmm> /to <d/M/yyyy HHmm>");
+                }
+                break;
+
+            case DAYPLAN:
+                if (argLength != 2) {
+                    throw new PiggyException("The 'agenda' command requires a valid date. Format: agenda for <d/M/yyyy>");
+                }
+                break;
+
+            case UNKNOWN:
+            default:
+                throw new PiggyException("Unknown command. Please try again.");
+        }
+    }
+
 
     public static void main(String[] args) {
         try {
