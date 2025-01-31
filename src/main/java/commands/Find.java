@@ -5,7 +5,17 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * Represents a command to find tasks in the task list that match one or more keywords.
+ */
 public class Find {
+    /**
+     * Searches for tasks that contain any of the provided keywords.
+     *
+     * @param userInput The input command containing the keyword(s) to search for.
+     * @param tasks The list of tasks to search through.
+     * @return A formatted string listing matching tasks or a message indicating no matches were found.
+     */
     public static String execute(String userInput, ArrayList<Task> tasks) {
         // Check if at least one keyword is provided
         String[] inputParts = userInput.split(" ", 2);
