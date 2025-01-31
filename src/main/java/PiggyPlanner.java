@@ -134,13 +134,13 @@ public class PiggyPlanner {
                 }
                 break;
             case FIND:
-                if (argLength != 2) {
-                    throw new PiggyException("The '" + command.toString().toLowerCase() + "' command requires exactly 1 keyword to look for at a time.");
+                if (argLength < 2 || inputParts[1].trim().isEmpty()) {
+                    throw new PiggyException("You forgot to tell me what keyword(s) to look for. Try again!");
                 }
                 break;
 
             case TODO:
-                if (argLength != 2) {
+                if (argLength != 2 || inputParts[1].trim().isEmpty()) {
                     throw new PiggyException("The 'todo' command requires a task description.");
                 }
                 break;

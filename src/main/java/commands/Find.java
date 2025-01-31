@@ -2,34 +2,41 @@ package commands;
 
 import tasks.Task;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 public class Find {
     public static String execute(String userInput, ArrayList<Task> tasks) {
-        //get keyword
-        //search through stored list
-        // return or say none found
+        // Check if at least one keyword is provided
+        String[] inputParts = userInput.split(" ", 2);
 
-        String keyword = userInput.split(" ")[1].trim().toLowerCase();
-        ArrayList<Task> matchingTasks = new ArrayList<>();
+        // Extract keywords and store them in a HashSet for quick lookups
+        String[] keywords = inputParts[1].trim().toLowerCase().split("\\s+");
+        Set<Task> matchingTasks = new HashSet<>(); // Unordered set for efficiency
 
-        // Search for tasks containing the keyword
+        // Search for tasks that contain any of the keywords
         for (Task task : tasks) {
-            if (task.getName().toLowerCase().contains(keyword)) {
-                matchingTasks.add(task);
+            String taskNameLower = task.getName().toLowerCase();
+            for (String keyword : keywords) {
+                if (taskNameLower.contains(keyword)) {
+                    matchingTasks.add(task);
+                    break; // Avoid unnecessary checks once a match is found
+                }
             }
         }
 
-        // Handle no matches found
+        // Handle case where no tasks are found
         if (matchingTasks.isEmpty()) {
-            return "I couldn't find any tasks with the keyword: \"" + keyword + "\". Try a different one!";
+            return "I couldn't find any related to the keywords: " + String.join(", ", keywords) + ". Try different ones!";
         }
 
-        // Format the results nicely
-        StringBuilder result = new StringBuilder("Here are the tasks I found related to \"" + keyword + "\":\n");
-        for (int i = 0; i < matchingTasks.size(); i++) {
-            result.append(i + 1).append(". ").append(matchingTasks.get(i)).append("\n");
+        // Format and return the results
+        StringBuilder result = new StringBuilder("Here are the tasks I found related to the keywords: " + String.join(", ", keywords) + ":\n");
+        int count = 1;
+        for (Task task : matchingTasks) {
+            result.append(count++).append(". ").append(task).append("\n");
         }
+
         return result.toString().trim();
-
     }
 }
