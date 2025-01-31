@@ -14,15 +14,29 @@ import tasks.TaskList;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+/**
+ * The main class for the PiggyPlanner application.
+ * This class handles user interactions, processes commands, and manages tasks.
+ */
 public class PiggyPlanner {
     private final TaskList taskList;
     private final Scanner reader;
 
+    /**
+     * Constructs a new PiggyPlanner instance.
+     * Initializes the task list by loading stored tasks and sets up a scanner for user input.
+     *
+     * @throws PiggyException if there is an error loading the stored tasks.
+     */
     public PiggyPlanner() throws PiggyException {
         this.taskList = new TaskList(Storage.loadList());
         this.reader = new Scanner(System.in);
     }
 
+    /**
+     * Runs the PiggyPlanner application.
+     * Displays a welcome message and continuously listens for user commands until the user exits.
+     */
     public void run() {
         Ui.showWelcomeMessage();
 
@@ -88,6 +102,14 @@ public class PiggyPlanner {
         }
     }
 
+    /**
+     * Validates the arguments provided for a given command.
+     * Ensures the user input meets the expected format for each command.
+     *
+     * @param command The command type provided by the user.
+     * @param inputParts The split user input containing command and arguments.
+     * @throws PiggyException if the provided arguments are incorrect or missing.
+     */
     private void validateArguments(CommandType command, String[] inputParts) throws PiggyException {
         int argLength = inputParts.length; // Check number of arguments
 
@@ -137,7 +159,12 @@ public class PiggyPlanner {
         }
     }
 
-
+    /**
+     * The entry point for the PiggyPlanner application.
+     * Initializes and runs the application.
+     *
+     * @param args Command-line arguments (not used yet).
+     */
     public static void main(String[] args) {
         try {
             new PiggyPlanner().run();

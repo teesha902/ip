@@ -15,13 +15,21 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-//FORMAT: [status] | [TYPE: name] | [deadline OR start-end OR "-"]
+
+/**
+ * Handles the storage and retrieval of tasks from a file.
+ * Provides methods to load, save, and ensure the file's existence.
+ */
 public class Storage {
+
     private static final String FILE_PATH = "data/taskList.txt";
     private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
-    //check if file/list is empty
+    /**
+     * Handles the storage and retrieval of tasks from a file.
+     * Provides methods to load, save, and ensure the file's existence.
+     */
     private static void ensureFileExists() {
         try {
             File file = new File(FILE_PATH);
@@ -40,7 +48,13 @@ public class Storage {
         }
     }
 
-    //load_file method: reconstruct list everytime program starts
+    /**
+     * Loads the list of tasks from the file into an ArrayList.
+     * Parses each line and reconstructs corresponding Task objects.
+     *
+     * @return An ArrayList of Task objects representing the saved tasks.
+     * @throws PiggyException If an error occurs while loading tasks from the file.
+     */
     public static ArrayList<Task> loadList() throws PiggyException {
         ArrayList<Task> taskList = new ArrayList<>();
         ensureFileExists();
@@ -112,7 +126,13 @@ public class Storage {
         return taskList;
     }
 
-    //updateList: update list as items are added/deleted/marked/unmarked/
+    /**
+     * Updates the storage file with the current list of tasks.
+     * Creates a backup before writing and restores it if an error occurs.
+     *
+     * @param taskList The list of tasks to be saved.
+     * @throws PiggyException If an error occurs while updating the file.
+     */
     public static void updateList(ArrayList<Task> taskList) throws PiggyException {
         ensureFileExists(); // Make sure the file exists before writing
         File originalFile = new File(FILE_PATH);

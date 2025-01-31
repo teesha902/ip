@@ -21,21 +21,21 @@ public class DeleteTaskTest {
     @Test
     void execute_deleteFromEmptyList() {
         PiggyException e = assertThrows(PiggyException.class, () -> DeleteTask.execute("delete 1", taskList));
-        assertEquals("You need to pick a task to delete that is actually in the list, silly", e.getMessage());
+        assertEquals("You need to pick a task to delete that is actually in the list, silly.", e.getMessage());
     }
 
     @Test
     void execute_nonIntegerIndex() {
         taskList.add(new ToDo("Buy groceries")); // Add at least 1 task
         PiggyException e = assertThrows(PiggyException.class, () -> DeleteTask.execute("delete one", taskList));
-        assertEquals("You need to pick a single index number to mark in the list. You can try again.", e.getMessage());
+        assertEquals("You need to pick a single index number to delete from the list. You can try again.", e.getMessage());
     }
 
     @Test
     void execute_outOfBoundsIndex() {
         taskList.add(new ToDo("Do homework"));
         PiggyException e = assertThrows(PiggyException.class, () -> DeleteTask.execute("delete 5", taskList));
-        assertEquals("You need to pick a task to delete that is actually in the list, silly", e.getMessage());
+        assertEquals("You need to pick a task to delete that is actually in the list, silly.", e.getMessage());
     }
 
     @Test

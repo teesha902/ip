@@ -101,7 +101,7 @@ public class AddTaskTest {
             AddTask.event("event Conference /from 32/13/2025 0900 /to 1/4/2025 1100", taskList);
         });
         assertEquals("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800)." +
-                "\nOr check that the start time is before the end time:", thrown.getMessage());
+                "\nOr check that the start time is before the end time.", thrown.getMessage());
     }
 
     @Test
@@ -110,7 +110,7 @@ public class AddTaskTest {
             AddTask.event("event Conference /from 2/4/2025 1800 /to 1/4/2025 0900", taskList);
         });
         assertEquals("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800)." +
-                "\nOr check that the start time is before the end time:", thrown.getMessage());
+                "\nOr check that the start time is before the end time.", thrown.getMessage());
     }
 }
 

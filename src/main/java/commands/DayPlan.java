@@ -9,7 +9,20 @@ import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a command that generates a day's plan based on tasks.
+ * It checks for deadlines and events occurring on a specified date.
+ */
 public class DayPlan {
+
+    /**
+     * Executes the "agenda for {date}" command, retrieving tasks and events for a specified date.
+     *
+     * @param userInput The user's input string containing the date
+     * @param taskList  The list of tasks to check against the specified date.
+     * @return A formatted string of deadlines and events occurring on the specified date.
+     * @throws PiggyException If the user input is invalid or contains an incorrect date format.
+     */
     public static String execute(String userInput, ArrayList<Task> taskList) throws PiggyException {
         if (taskList.isEmpty()) {
             return "You have no tasks at the moment. Free all day!";
@@ -86,7 +99,6 @@ public class DayPlan {
                     .append(eventCount == 1 ? "" : "s")
                     .append(" on this day.\n");
         }
-
         return tasksOfDay.toString().trim();
     }
 }
