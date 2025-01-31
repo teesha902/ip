@@ -5,6 +5,7 @@ import commands.ListCommand;
 import commands.Mark;
 import commands.Unmark;
 import commands.DayPlan;
+import commands.Find;
 import exception.PiggyException;
 import tasks.Task;
 import storage.Storage;
@@ -84,6 +85,10 @@ public class PiggyPlanner {
                         Storage.updateList(taskList.getAllTasks());
                         break;
 
+                    case FIND:
+                        Ui.showMessage(Find.execute(userInput, taskList.getAllTasks()));
+                        break;
+
                     case DAYPLAN:
                         Ui.showMessage(DayPlan.execute(userInput, taskList.getAllTasks()));
                         break;
@@ -126,6 +131,11 @@ public class PiggyPlanner {
             case DELETE:
                 if (argLength != 2) {
                     throw new PiggyException("The '" + command.toString().toLowerCase() + "' command requires exactly one task number.");
+                }
+                break;
+            case FIND:
+                if (argLength != 2) {
+                    throw new PiggyException("The '" + command.toString().toLowerCase() + "' command requires exactly 1 keyword to look for at a time.");
                 }
                 break;
 
