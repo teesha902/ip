@@ -48,7 +48,6 @@ public class Find {
         for (Task task : matchingTasks) {
             result.append(count++).append(". ").append(task).append("\n");
         }
-
         return result.toString().trim();
     }
 }
