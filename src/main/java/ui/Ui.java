@@ -1,7 +1,7 @@
 package ui;
 
 /**
- * Handles user interface interactions such as displaying messages.
+ * Handles user interface interactions by displaying messages.
  */
 public class Ui {
     /**

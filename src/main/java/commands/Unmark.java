@@ -5,7 +5,7 @@ import exception.PiggyException;
 import java.util.ArrayList;
 
 /**
- * Handles unmarking a task as incomplete in the task list.
+ * Handles unmarking a task in the task list.
  */
 public class Unmark {
     /**
