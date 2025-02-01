@@ -1,7 +1,7 @@
 package commands;
 
-import tasks.Task;
 import exception.PiggyException;
+import tasks.Task;
 import java.util.ArrayList;
 
 /**
@@ -32,8 +32,8 @@ public class Mark {
                 // Mark the task and return success message
                 currTask.mark();
 
-                return "Good work! Let's keep going." +
-                        "\nI've marked this task as done:\n  " + currTask;
+                return "Good work! Let's keep going."
+                        + "\nI've marked this task as done:\n  " + currTask;
             }
 
         } catch (NumberFormatException e) {
