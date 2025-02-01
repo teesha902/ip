@@ -7,17 +7,15 @@ import commands.Unmark;
 import commands.DayPlan;
 import commands.Find;
 import exception.PiggyException;
-import tasks.Task;
 import storage.Storage;
 import ui.Ui;
 import tasks.TaskList;
 
 import java.util.Scanner;
-import java.util.ArrayList;
 
 /**
  * The main class for the PiggyPlanner application.
- * This class handles user interactions, processes commands, and manages tasks.
+ * This class validates and processes commands.
  */
 public class PiggyPlanner {
     private final TaskList taskList;

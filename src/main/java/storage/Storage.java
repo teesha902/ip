@@ -15,7 +15,6 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 /**
  * Handles the storage and retrieval of tasks from a file.
  * Provides methods to load, save, and ensure the file's existence.
