@@ -46,6 +46,7 @@ run{
 }
 
 checkstyle {
-    toolVersion = '10.2'
+    toolVersion = '10.20.2'
     configFile = file("config/checkstyle/checkstyle.xml")
+    configProperties = ["suppressionFile": file("config/checkstyle/Checkstyle Suppressions.xml")]
 }
