@@ -1,10 +1,10 @@
 package commands;
 
-import tasks.Task;
+import exception.PiggyException;
 import tasks.Deadline;
 import tasks.Event;
+import tasks.Task;
 import java.util.ArrayList;
-import exception.PiggyException;
 import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -32,8 +32,8 @@ public class DayPlan {
 
         // Ensure the command has the correct format
         if (inputParts.length < 3 || !inputParts[1].equals("for")) {
-            throw new PiggyException("I don't exactly understand what you are asking. Try this format:\n " +
-                    "agenda for d/M/yyyy (e.g., agenda for 2/12/2023)");
+            throw new PiggyException("I don't exactly understand what you are asking. Try this format:\n "
+                    + "agenda for d/M/yyyy (e.g., agenda for 2/12/2023)");
         }
 
         // Extract the date
@@ -41,14 +41,16 @@ public class DayPlan {
 
         // Check if date missing
         if (dateStr.isEmpty()) {
-            throw new PiggyException("Missing date! Please provide a valid date in the format d/M/yyyy (e.g., 2/12/2023).");
+            throw new PiggyException("Missing date! Please provide a valid date "
+                    + "in the format d/M/yyyy (e.g., 2/12/2023).");
         }
 
         LocalDate currDate;
         try {
             currDate = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("d/M/yyyy"));
         } catch (DateTimeParseException e) {
-            throw new PiggyException("Invalid date! Please check the day, month, and format (d/M/yyyy, e.g., 2/12/2023).");
+            throw new PiggyException("Invalid date! Please check the day, month, "
+                    + "and format (d/M/yyyy, e.g., 2/12/2023).");
         }
 
         // Format output date

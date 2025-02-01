@@ -1,10 +1,10 @@
 package commands;
 
-import tasks.Task;
+import exception.PiggyException;
 import tasks.Deadline;
 import tasks.Event;
+import tasks.Task;
 import tasks.ToDo;
-import exception.PiggyException;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -90,8 +90,8 @@ public class AddTask {
             taskList.add(newTask);
             return taskAddedMsg(newTask, taskList.size());
         } catch (Exception e) {
-            throw new PiggyException("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).\n" +
-                    "Or check that the start time is before the end time.");
+            throw new PiggyException("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).\n"
+                    + "Or check that the start time is before the end time.");
         }
     }
 

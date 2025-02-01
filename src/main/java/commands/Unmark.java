@@ -1,7 +1,7 @@
 package commands;
 
-import tasks.Task;
 import exception.PiggyException;
+import tasks.Task;
 import java.util.ArrayList;
 
 /**
@@ -31,8 +31,7 @@ public class Unmark {
             } else {
                 // Mark the task and return success message
                 currTask.unmark();
-                return "Oops, no problem." +
-                        "\nI've unmarked the task:\n  " + currTask;
+                return "Oops, no problem.\nI've unmarked the task:\n  " + currTask;
             }
 
         } catch (NumberFormatException e) {

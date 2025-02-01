@@ -10,11 +10,10 @@ import java.time.LocalDate;
  * Represents an event task that has a start and end date/time.
  */
 public class Event extends Task {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy");
+    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy, h:mma");
     private final LocalDateTime start;
     private final LocalDateTime end;
-    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy, h:mma");
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy");
-
     /**
      * Constructs a new Event task.
      *
@@ -106,7 +105,7 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + start.format(OUTPUT_FORMATTER).toLowerCase() +
-                " to: " + end.format(OUTPUT_FORMATTER).toLowerCase() + ")";
+        return "[E]" + super.toString() + " (from: " + start.format(OUTPUT_FORMATTER).toLowerCase()
+                + " to: " + end.format(OUTPUT_FORMATTER).toLowerCase() + ")";
     }
 }

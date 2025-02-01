@@ -2,8 +2,8 @@ package commands;
 
 import tasks.Task;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a command to find tasks in the task list that match one or more keywords.
@@ -37,11 +37,13 @@ public class Find {
 
         // Handle case where no tasks are found
         if (matchingTasks.isEmpty()) {
-            return "I couldn't find any related to the keywords: " + String.join(", ", keywords) + ". Try different ones!";
+            return "I couldn't find any related to the keywords: "
+                    + String.join(", ", keywords) + ". Try different ones!";
         }
 
         // Format and return the results
-        StringBuilder result = new StringBuilder("Here are the tasks I found related to the keywords: " + String.join(", ", keywords) + ":\n");
+        StringBuilder result = new StringBuilder("Here are the tasks I found related to the keywords: "
+                + String.join(", ", keywords) + ":\n");
         int count = 1;
         for (Task task : matchingTasks) {
             result.append(count++).append(". ").append(task).append("\n");

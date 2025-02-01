@@ -1,10 +1,10 @@
 package storage;
 
-import tasks.Task;
-import tasks.ToDo;
+import exception.PiggyException;
 import tasks.Deadline;
 import tasks.Event;
-import exception.PiggyException;
+import tasks.Task;
+import tasks.ToDo;
 
 import java.util.ArrayList;
 import java.io.File; //no r/w - only interacts with file metadata (exists, size, etc.)
@@ -158,7 +158,8 @@ public class Storage {
                     type = "E";
                     LocalDateTime startTime = ((Event) task).getStart();
                     LocalDateTime endTime = ((Event) task).getEnd();
-                    timeInfo = "from: " + startTime.format(OUTPUT_FORMATTER) + ", to: " + endTime.format(OUTPUT_FORMATTER);
+                    timeInfo = "from: " + startTime.format(OUTPUT_FORMATTER)
+                            + ", to: " + endTime.format(OUTPUT_FORMATTER);
                 }
 
                 writer.write(status + " | " + type + ": " + task.getName() + " | " + timeInfo);
