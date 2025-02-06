@@ -12,33 +12,30 @@ public class Find {
     /**
      * Searches for tasks that contain any of the provided keywords.
      *
-     * @param userInput The input command containing the keyword(s) to search for.
      * @param tasks The list of tasks to search through.
+     * @param keywords The keywords to search for (supports multiple keywords via varargs).
      * @return A formatted string listing matching tasks or a message indicating no matches were found.
      */
-    public static String execute(String userInput, ArrayList<Task> tasks) {
-        // Check if at least one keyword is provided
-        String[] inputParts = userInput.split(" ", 2);
-
-        // Extract keywords and store them in a HashSet for quick lookups
-        String[] keywords = inputParts[1].trim().toLowerCase().split("\\s+");
+    public static String execute(ArrayList<Task> tasks, String... keywords) {
+        if (keywords.length == 0) {
+            return "You forgot to tell me what keyword(s) to look for. Try again!";
+        }
         Set<Task> matchingTasks = new HashSet<>(); // Unordered set for efficiency
 
-        // Search for tasks that contain any of the keywords
+        // make keywords lowercase for case-insensitive matching
         for (Task task : tasks) {
             String taskNameLower = task.getName().toLowerCase();
             for (String keyword : keywords) {
-                if (taskNameLower.contains(keyword)) {
+                if (taskNameLower.contains(keyword.toLowerCase())) {
                     matchingTasks.add(task);
-                    break; // Avoid unnecessary checks once a match is found
+                    break; // Avoid unnecessary checks once match is found
                 }
             }
         }
-
         // Handle case where no tasks are found
         if (matchingTasks.isEmpty()) {
-            return "I couldn't find any related to the keywords: \""
-                    + String.join("\", ", keywords) + " \nTry different ones!";
+            return "I couldn't find any tasks related to the keywords: \""
+                    + String.join("\", \"", keywords) + "\".\nTry different ones!";
         }
 
         // Format and return the results
