@@ -67,10 +67,9 @@ public class MainWindow extends Application {
 
         // Display user input and PiggyPlanner's response in the dialogContainer
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog("You: " + input),
-                DialogBox.getPiggyPlannerDialog("🐷: " + response)
+                DialogBox.getUserDialog(input),
+                DialogBox.getPiggyPlannerDialog(response)
         );
-
         userInput.clear(); // Clear input field after sending msg
     }
 

@@ -13,6 +13,7 @@ import storage.Storage;
 import tasks.TaskList;
 import ui.Ui;
 import java.util.Scanner;
+import javafx.application.Platform;
 
 /**
  * The main class for the PiggyPlanner application.
@@ -34,77 +35,109 @@ public class PiggyPlanner {
     }
 
     /**
-     * Runs the PiggyPlanner application.
-     * Displays a welcome message and continuously listens for user commands until the user exits.
+     * Processes the user's command and returns the result.
+     *
+     * @param userInput The input command string from the user.
+     * @return The result message after executing the command.
+     * @throws PiggyException If an invalid command or incorrect arguments are provided.
+     */
+    private String processCommand(String userInput) throws PiggyException {
+        String[] inputParts = userInput.trim().split(" ", 2);  // Split: command, arguments
+        CommandType command = CommandType.fromString(inputParts[0]);
+
+        validateArguments(command, inputParts);
+
+        switch (command) {
+        case LIST:
+            return ListCommand.execute(taskList.getAllTasks());
+
+        case MARK:
+            String markResponse = Mark.execute(userInput, taskList.getAllTasks());
+            Storage.updateList(taskList.getAllTasks());
+            return markResponse;
+
+        case UNMARK:
+            String unmarkResponse = Unmark.execute(userInput, taskList.getAllTasks());
+            Storage.updateList(taskList.getAllTasks());
+            return unmarkResponse;
+
+        case TODO:
+            String todoResponse = AddTask.todo(userInput, taskList.getAllTasks());
+            Storage.updateList(taskList.getAllTasks());
+            return todoResponse;
+
+        case DEADLINE:
+            String deadlineResponse = AddTask.deadline(userInput, taskList.getAllTasks());
+            Storage.updateList(taskList.getAllTasks());
+            return deadlineResponse;
+
+        case EVENT:
+            String eventResponse = AddTask.event(userInput, taskList.getAllTasks());
+            Storage.updateList(taskList.getAllTasks());
+            return eventResponse;
+
+        case DELETE:
+            String deleteResponse = DeleteTask.execute(userInput, taskList.getAllTasks());
+            Storage.updateList(taskList.getAllTasks());
+            return deleteResponse;
+
+        case FIND:
+            return Find.execute(userInput, taskList.getAllTasks());
+
+        case DAYPLAN:
+            return DayPlan.execute(userInput, taskList.getAllTasks());
+
+        case EXIT:
+            Platform.exit();
+            return "Goodbye! See you soon! 🐷";
+
+
+        case UNKNOWN:
+        default:
+            throw new PiggyException("Unfortunately, I don't know what that means. Please try again.");
+        }
+    }
+
+    /**
+     * Handles user input from the GUI and returns the response to be displayed.
+     *
+     * @param input The user's input string.
+     * @return The response string from PiggyPlanner.
+     */
+    public String getResponse(String input) {
+        try {
+            return processCommand(input);
+        } catch (PiggyException e) {
+            return e.getMessage();  // Return error messages to GUI
+        }
+    }
+
+    /**
+     * Runs the PiggyPlanner application in the console.
+     * Continuously listens for user commands until the user exits.
      */
     public void run() {
         Ui.showWelcomeMessage();
 
         while (true) {
-            String userInput = reader.nextLine();
-            String[] inputParts = userInput.split(" "); // Split into command + arguments
-            CommandType command = CommandType.fromString(inputParts[0]);
-
+            String userInput = reader.nextLine();  // Get user input from console
 
             try {
-                validateArguments(command, inputParts); //validate input format before execution
+                String response = processCommand(userInput);
+                Ui.showMessage(response);
 
-                switch (command) {
-                case LIST:
-                    Ui.showMessage(ListCommand.execute(taskList.getAllTasks()));
-                    break;
-
-                case MARK:
-                    Ui.showMessage(Mark.execute(userInput, taskList.getAllTasks()));
-                    Storage.updateList(taskList.getAllTasks());
-                    break;
-
-                case UNMARK:
-                    Ui.showMessage(Unmark.execute(userInput, taskList.getAllTasks()));
-                    Storage.updateList(taskList.getAllTasks());
-                    break;
-
-                case TODO:
-                    Ui.showMessage(AddTask.todo(userInput, taskList.getAllTasks()));
-                    Storage.updateList(taskList.getAllTasks());
-                    break;
-
-                case DEADLINE:
-                    Ui.showMessage(AddTask.deadline(userInput, taskList.getAllTasks()));
-                    Storage.updateList(taskList.getAllTasks());
-                    break;
-
-                case EVENT:
-                    Ui.showMessage(AddTask.event(userInput, taskList.getAllTasks()));
-                    Storage.updateList(taskList.getAllTasks());
-                    break;
-
-                case DELETE:
-                    Ui.showMessage(DeleteTask.execute(userInput, taskList.getAllTasks()));
-                    Storage.updateList(taskList.getAllTasks());
-                    break;
-
-                case FIND:
-                    Ui.showMessage(Find.execute(userInput, taskList.getAllTasks()));
-                    break;
-
-                case DAYPLAN:
-                    Ui.showMessage(DayPlan.execute(userInput, taskList.getAllTasks()));
-                    break;
-
-                case EXIT:
+                if (CommandType.fromString(userInput.split(" ")[0]) == CommandType.EXIT) {
                     Ui.showExitMessage();
-                    return; // Exit the program
-
-                case UNKNOWN:
-                default:
-                    throw new PiggyException("Unfortunately, I don't know what that means. Please try again.");
+                    return;  // Exit
                 }
+
             } catch (PiggyException e) {
                 Ui.showMessage(e.getMessage());
             }
         }
     }
+
+
 
     /**
      * Validates the arguments provided for a given command.
@@ -186,9 +219,5 @@ public class PiggyPlanner {
         }
     }
 
-    public String getResponse(String input) {
-        // Process input and return a simple response for now
-        // You can expand this to call your command processing logic
-        return "You said: " + input;
-    }
+
 }
