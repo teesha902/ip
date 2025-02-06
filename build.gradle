@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    //id 'org.openjfx.javafxplugin' version '0.0.13'
 
 }
 
@@ -15,6 +16,15 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
     implementation group: 'com.joestelmach', name: 'natty', version: '0.13'
+
+    String javaFxVersion = '17.0.7'
+
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'mac'
+    //implementation 'org.openjfx:javafx-controls:17.0.2'
+    //implementation 'org.openjfx:javafx-fxml:17.0.2'
 }
 
 test {
@@ -32,7 +42,8 @@ test {
 }
 
 application {
-    mainClass.set("PiggyPlanner")
+    //mainClass.set("PiggyPlanner")
+    mainClass.set("piggyplanner.Launcher")
 }
 
 shadowJar {
@@ -43,6 +54,7 @@ shadowJar {
 run{
     standardInput = System.in
     enableAssertions = true
+    //jvmArgs = ['--module-path', '/path/to/javafx-sdk/lib', '--add-modules', 'javafx.controls,javafx.fxml']
 }
 
 checkstyle {

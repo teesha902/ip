@@ -185,4 +185,10 @@ public class PiggyPlanner {
             System.out.println("An error occurred while starting the program: " + e.getMessage());
         }
     }
+
+    public String getResponse(String input) {
+        // Process input and return a simple response for now
+        // You can expand this to call your command processing logic
+        return "You said: " + input;
+    }
 }
