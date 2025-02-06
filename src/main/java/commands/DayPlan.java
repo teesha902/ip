@@ -49,7 +49,7 @@ public class DayPlan {
         try {
             currDate = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("d/M/yyyy"));
         } catch (DateTimeParseException e) {
-            throw new PiggyException("Invalid date! Please check the day, month, "
+            throw new PiggyException("Invalid date! \nPlease check the day, month, "
                     + "and format (d/M/yyyy, e.g., 2/12/2023).");
         }
 

@@ -15,11 +15,12 @@ public class ListCommand {
      */
     public static String execute(ArrayList<Task> taskList) {
         if (taskList.isEmpty()) {
-            return "You have no tasks at the moment.";
+            return "You have no tasks at the moment. Yay!.";
         }
-        StringBuilder fullList = new StringBuilder("To-do list:\n");
+        StringBuilder fullList = new StringBuilder("Here is our to-do list:\n");
         for (int i = 0; i < taskList.size(); i++) {
-            fullList.append((i + 1)).append(". ").append(taskList.get(i)).append("\n");
+            fullList.append(String.format("%d. 📌 %s\n", i + 1, taskList.get(i).toString()));
+
         }
         return fullList.toString().trim();
     }
