@@ -19,6 +19,10 @@ import javafx.application.Platform;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
+/**
+ * MainWindow initializes and manages the graphical user interface (GUI) for PiggyPlanner.
+ * It extends the JavaFX Application class and handles user interactions.
+ */
 public class MainWindow extends Application {
     @FXML
     private ScrollPane scrollPane;
@@ -34,6 +38,12 @@ public class MainWindow extends Application {
 
     private PiggyPlanner piggyPlanner;
 
+    /**
+     * Starts the JavaFX application, setting up the primary stage and loading the UI components.
+     *
+     * @param stage The primary stage for the application.
+     * @throws PiggyException If there is an error initializing PiggyPlanner.
+     */
     @Override
     //overriding start method from Application
     public void start(Stage stage) throws PiggyException { //main method JavaFX calls to set up + display GUI window
@@ -66,6 +76,9 @@ public class MainWindow extends Application {
         }
     }
 
+    /**
+     * Initializes the UI components and sets up event listeners.
+     */
     @FXML
     public void initialize() {
         // Make sure ScrollPane resizes with window
@@ -88,6 +101,10 @@ public class MainWindow extends Application {
         userInput.setOnAction(event -> handleUserInput());
     }
 
+    /**
+     * Handles user input and generates a response from PiggyPlanner.
+     * Displays the conversation in the UI.
+     */
     @FXML
     private void handleUserInput() {
         String input = userInput.getText(); // Get user's input from text field
@@ -108,6 +125,11 @@ public class MainWindow extends Application {
         }
     }
 
+    /**
+     * Sets the PiggyPlanner instance for the UI.
+     *
+     * @param piggyPlanner The PiggyPlanner instance.
+     */
     public void setPiggyPlanner(PiggyPlanner piggyPlanner) {
         this.piggyPlanner = piggyPlanner;
     }

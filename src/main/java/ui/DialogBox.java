@@ -10,11 +10,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-// DialogBox = message bubble for user/piggy, inherits from Hbox
+/**
+ * DialogBox represents a message bubble for the user and PiggyPlanner.
+ * It extends HBox and allows messages to be displayed with an image.
+ */
 public class DialogBox extends HBox {
     private final Label text;
     private final ImageView displayPicture;
 
+    /**
+     * Constructs a DialogBox with a specified message and image.
+     *
+     * @param message The text to display.
+     * @param img The image to display.
+     */
     public DialogBox(String message, Image img) {
         text = new Label(message);
         text.setWrapText(true); //text wrapping
@@ -38,7 +47,9 @@ public class DialogBox extends HBox {
 
         this.getChildren().addAll(text, displayPicture); // Add message and image
     }
-    // Flips the dialog box alignment to the left for PiggyPlanner responses
+    /**
+     * Flips the dialog box alignment to the left, for PiggyPlanner responses.
+     */
     private void flip() {
         this.setAlignment(Pos.TOP_LEFT);
         //Converts curr elements (text, images) in dialog box into list to manipulate
@@ -49,7 +60,13 @@ public class DialogBox extends HBox {
         this.getChildren().setAll(nodes);
     }
 
-    // Factory method for user dialog
+    /**
+     * Creates a DialogBox for user messages.
+     *
+     * @param message The user’s message.
+     * @param userImage The user’s profile image.
+     * @return A DialogBox aligned to the right.
+     */
     public static DialogBox getUserDialog(String message, Image userImage) {
         //Image userImage = new Image(DialogBox.class.getResourceAsStream("/images/user.png"));
         DialogBox dialogBox = new DialogBox(message, userImage);
@@ -57,7 +74,13 @@ public class DialogBox extends HBox {
         return dialogBox;
     }
 
-    // Factory method for PiggyPlanner dialog (with flip)
+    /**
+     * Creates a DialogBox for PiggyPlanner responses, with flipped alignment.
+     *
+     * @param message The PiggyPlanner’s message.
+     * @param piggyImage The PiggyPlanner’s profile image.
+     * @return A DialogBox aligned to the left.
+     */
     public static DialogBox getPiggyPlannerDialog(String message, Image piggyImage) {
         //Image pigImage = new Image(DialogBox.class.getResourceAsStream("/images/pig.png"));
         DialogBox dialogBox = new DialogBox(message, piggyImage);
