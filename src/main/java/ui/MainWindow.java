@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import piggyplanner.PiggyPlanner;
@@ -24,6 +26,9 @@ public class MainWindow extends Application {
     private VBox dialogContainer;
     @FXML
     private TextField userInput;
+
+    private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
+    private final Image piggyImage = new Image(this.getClass().getResourceAsStream("/images/pig.png"));
 
     private PiggyPlanner piggyPlanner;
 
@@ -55,7 +60,8 @@ public class MainWindow extends Application {
     public void initialize() {
         // Auto-scroll as new messages appear
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
-        dialogContainer.getChildren().add(DialogBox.getPiggyPlannerDialog(Ui.showWelcomeMessage()));
+        dialogContainer.getChildren().add(DialogBox.getPiggyPlannerDialog(Ui.showWelcomeMessage(), piggyImage));
+
         // Add key event listener for Enter key
         userInput.setOnAction(event -> handleUserInput());
     }
@@ -67,8 +73,8 @@ public class MainWindow extends Application {
 
         // Display user input and PiggyPlanner's response in the dialogContainer
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input),
-                DialogBox.getPiggyPlannerDialog(response)
+                DialogBox.getUserDialog(input, userImage),
+                DialogBox.getPiggyPlannerDialog(response, piggyImage)
         );
         userInput.clear(); // Clear input field after sending msg
 

@@ -200,7 +200,7 @@ public class PiggyPlanner {
 
         case UNKNOWN:
         default:
-            throw new PiggyException("Unknown command. Please try again.");
+            throw new PiggyException("Unknown command. Can you try again?");
         }
     }
 
