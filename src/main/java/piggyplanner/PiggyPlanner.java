@@ -41,7 +41,7 @@ public class PiggyPlanner {
      * @throws PiggyException If an invalid command or incorrect arguments are provided.
      */
     private String processCommand(String userInput) throws PiggyException {
-        String[] inputParts = userInput.trim().split(" ", 2);  // Split: command, arguments
+        String[] inputParts = userInput.trim().split(" ", 2); // Split: command, arguments
         CommandType command = CommandType.fromString(inputParts[0]);
 
         validateArguments(command, inputParts);
@@ -81,7 +81,8 @@ public class PiggyPlanner {
             return deleteResponse;
 
         case FIND:
-            return Find.execute(userInput, taskList.getAllTasks());
+            //return Find.execute(userInput, taskList.getAllTasks());
+            return Find.execute(taskList.getAllTasks(), inputParts[1].trim().split(" "));
 
         case DAYPLAN:
             return DayPlan.execute(userInput, taskList.getAllTasks());
@@ -107,7 +108,7 @@ public class PiggyPlanner {
         try {
             return processCommand(input);
         } catch (PiggyException e) {
-            return e.getMessage();  // Return error messages to GUI
+            return e.getMessage(); // Return error messages to GUI
         }
     }
 
@@ -119,7 +120,7 @@ public class PiggyPlanner {
         Ui.showWelcomeMessage();
 
         while (true) {
-            String userInput = reader.nextLine();  // Get user input from console
+            String userInput = reader.nextLine(); // Get user input from console
 
             try {
                 String response = processCommand(userInput);
@@ -127,7 +128,7 @@ public class PiggyPlanner {
 
                 if (CommandType.fromString(userInput.split(" ")[0]) == CommandType.EXIT) {
                     Ui.showExitMessage();
-                    return;  // Exit
+                    return; // Exit
                 }
 
             } catch (PiggyException e) {
@@ -217,6 +218,4 @@ public class PiggyPlanner {
             System.out.println("An error occurred while starting the program: " + e.getMessage());
         }
     }
-
-
 }
