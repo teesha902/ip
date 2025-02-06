@@ -37,8 +37,8 @@ public class Find {
 
         // Handle case where no tasks are found
         if (matchingTasks.isEmpty()) {
-            return "I couldn't find any related to the keywords: "
-                    + String.join(", ", keywords) + ". Try different ones!";
+            return "I couldn't find any related to the keywords: \""
+                    + String.join("\", ", keywords) + " \nTry different ones!";
         }
 
         // Format and return the results

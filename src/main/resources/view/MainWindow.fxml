@@ -13,8 +13,7 @@
 
     <!-- ScrollPane to display conversation -->
     <ScrollPane fx:id="scrollPane" prefHeight="500.0" prefWidth="380.0" layoutX="10.0" layoutY="10.0" fitToWidth="true">
-        <!-- Vbox inside ScrollPane ???? -->
-        <!-- Vbox inside ScrollPane ???? <VBox fx:id="dialogContainer" spacing="10.0" style="-fx-padding: 10;" /> -->
+        <!-- Vbox inside ScrollPane -->
         <VBox fx:id="dialogContainer" spacing="10.0" style="-fx-padding: 10;" prefWidth="380.0" />
     </ScrollPane>
 

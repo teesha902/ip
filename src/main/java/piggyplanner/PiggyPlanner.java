@@ -13,7 +13,6 @@ import storage.Storage;
 import tasks.TaskList;
 import ui.Ui;
 import java.util.Scanner;
-import javafx.application.Platform;
 
 /**
  * The main class for the PiggyPlanner application.
@@ -88,7 +87,7 @@ public class PiggyPlanner {
             return DayPlan.execute(userInput, taskList.getAllTasks());
 
         case EXIT:
-            Platform.exit();
+            //Platform.exit();
             return "Goodbye! See you soon! 🐷";
 
 

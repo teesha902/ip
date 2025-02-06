@@ -16,6 +16,8 @@ public class DialogBox extends HBox {
 
     public DialogBox(String message) { //}, Image img) {
         text = new Label(message);
+        text.setWrapText(true); //text wrapping
+        text.setMaxWidth(280); //limit width - prevent overflow
         //displayPicture = new ImageView(img);
 
         // Set size and style

@@ -1,7 +1,6 @@
 package ui;
 
 import java.io.IOException;
-//import javafx.scene.control.Button;
 
 import exception.PiggyException;
 import javafx.application.Application;
@@ -14,6 +13,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import piggyplanner.PiggyPlanner;
+import javafx.application.Platform;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 public class MainWindow extends Application {
     @FXML
@@ -22,15 +24,12 @@ public class MainWindow extends Application {
     private VBox dialogContainer;
     @FXML
     private TextField userInput;
-    //@FXML
-    //private Button sendButton;
 
     private PiggyPlanner piggyPlanner;
 
     @Override
     //overriding start method from Application
     public void start(Stage stage) throws PiggyException { //main method JavaFX calls to set up + display GUI window
-        //PiggyPlanner piggyPlanner = new PiggyPlanner(); //Connects to your task manager (backend logic)
         this.piggyPlanner = new PiggyPlanner();
 
         try {
@@ -56,6 +55,7 @@ public class MainWindow extends Application {
     public void initialize() {
         // Auto-scroll as new messages appear
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
+        dialogContainer.getChildren().add(DialogBox.getPiggyPlannerDialog(Ui.showWelcomeMessage()));
         // Add key event listener for Enter key
         userInput.setOnAction(event -> handleUserInput());
     }
@@ -71,6 +71,13 @@ public class MainWindow extends Application {
                 DialogBox.getPiggyPlannerDialog(response)
         );
         userInput.clear(); // Clear input field after sending msg
+
+        if (input.equalsIgnoreCase("bye")) {
+            // Delay closing the window for 1.5 seconds
+            PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+            delay.setOnFinished(event -> Platform.exit());
+            delay.play();
+        }
     }
 
     public void setPiggyPlanner(PiggyPlanner piggyPlanner) {
