@@ -9,9 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import piggyplanner.PiggyPlanner;
@@ -26,6 +26,8 @@ public class MainWindow extends Application {
     private VBox dialogContainer;
     @FXML
     private TextField userInput;
+    @FXML
+    private Button sendButton;
 
     private final Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
     private final Image piggyImage = new Image(this.getClass().getResourceAsStream("/images/pig.png"));
@@ -49,6 +51,14 @@ public class MainWindow extends Application {
             // Set up the stage (window)
             stage.setTitle("PiggyPlanner 🐷");
             stage.setScene(scene);
+
+            // define minimum window size when resizing
+            stage.setMinWidth(400);
+            stage.setMinHeight(600);
+            //makes main UI (AnchorPane) always stretch to match scene width/height
+            ap.prefWidthProperty().bind(scene.widthProperty());
+            ap.prefHeightProperty().bind(scene.heightProperty());
+
             stage.show();
 
         } catch (IOException e) {
@@ -58,9 +68,21 @@ public class MainWindow extends Application {
 
     @FXML
     public void initialize() {
+        // Make sure ScrollPane resizes with window
+        scrollPane.fitToWidthProperty().set(true);
+
         // Auto-scroll as new messages appear
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
         dialogContainer.getChildren().add(DialogBox.getPiggyPlannerDialog(Ui.showWelcomeMessage(), piggyImage));
+
+        // Ensure user input field expands properly
+        AnchorPane.setLeftAnchor(userInput, 10.0);
+        AnchorPane.setRightAnchor(userInput, 80.0);
+        AnchorPane.setBottomAnchor(userInput, 10.0);
+
+        // Ensure send button stays at the right
+        AnchorPane.setRightAnchor(sendButton, 10.0);
+        AnchorPane.setBottomAnchor(sendButton, 10.0);
 
         // Add key event listener for Enter key
         userInput.setOnAction(event -> handleUserInput());

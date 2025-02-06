@@ -12,17 +12,34 @@
             style="-fx-background-color: #ffe6f0;"> <!-- Light pink background -->
 
     <!-- ScrollPane to display conversation -->
-    <ScrollPane fx:id="scrollPane" prefHeight="500.0" prefWidth="380.0" layoutX="10.0" layoutY="10.0" fitToWidth="true">
-        <!-- Vbox inside ScrollPane -->
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" hvalue="1.0" prefHeight="557.0" prefWidth="400.0" vvalue="1.0" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <!-- Vbox inside ScrollPane -->
         <VBox fx:id="dialogContainer" spacing="10.0" style="-fx-padding: 10;" prefWidth="380.0" />
     </ScrollPane>
 
-    <!-- TextField - where user types input -->
-    <TextField fx:id="userInput" layoutX="10.0" layoutY="520.0" prefWidth="300.0" promptText="Enter your task here..." />
 
-    <!-- Send Button -->
-    <Button fx:id="sendButton" text="Send" layoutX="320.0" layoutY="520.0" prefWidth="70.0" onAction="#handleUserInput"
-            style="-fx-background-color: #ff99c8; -fx-text-fill: white;" /> <!-- Pink button -->
+    <!-- Anchoring ScrollPane (fills available space except bottom 50px) -->
+    <AnchorPane.topAnchor>10.0</AnchorPane.topAnchor>
+    <AnchorPane.bottomAnchor>50.0</AnchorPane.bottomAnchor>
+    <AnchorPane.leftAnchor>10.0</AnchorPane.leftAnchor>
+    <AnchorPane.rightAnchor>10.0</AnchorPane.rightAnchor>
+
+    <AnchorPane prefHeight="50.0">
+        <!-- TextField - where user types input -->
+        <TextField fx:id="userInput" layoutX="10.0" layoutY="520.0" prefWidth="300.0" promptText="Enter your task here..." />
+        <!-- Send Button -->
+        <Button fx:id="sendButton" text="Send" layoutX="320.0" layoutY="520.0" prefWidth="70.0" onAction="#handleUserInput"
+                style="-fx-background-color: #ff99c8; -fx-text-fill: white;" /> <!-- Pink button -->
+
+        <AnchorPane.leftAnchor>10.0</AnchorPane.leftAnchor>
+        <AnchorPane.rightAnchor>10.0</AnchorPane.rightAnchor>
+        <AnchorPane.bottomAnchor>0.0</AnchorPane.bottomAnchor>
+    </AnchorPane>
+
+    <!-- Anchoring elements -->
+    <AnchorPane.bottomAnchor>0.0</AnchorPane.bottomAnchor>
+    <AnchorPane.leftAnchor>0.0</AnchorPane.leftAnchor>
+    <AnchorPane.rightAnchor>0.0</AnchorPane.rightAnchor>
 
 </AnchorPane>
 

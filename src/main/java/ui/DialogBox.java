@@ -29,11 +29,11 @@ public class DialogBox extends HBox {
                 + "-fx-background-radius: 10;");
 
         // Create a circular clip for the image
-        Circle clip = new Circle(25, 21, 14); // x, y, radius
+        Circle clip = new Circle(25, 21, 13.5); // x, y, radius
         displayPicture.setClip(clip); // Apply circular mask
 
         this.setAlignment(Pos.TOP_RIGHT); // Default alignment for user
-        this.setSpacing(10);
+        this.setSpacing(2);
         this.setMaxWidth(Double.MAX_VALUE); //Allow the dialog box to take full width
 
         this.getChildren().addAll(text, displayPicture); // Add message and image
