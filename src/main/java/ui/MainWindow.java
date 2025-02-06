@@ -57,6 +57,7 @@ public class MainWindow extends Application {
         // Auto-scroll as new messages appear
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
         // Add key event listener for Enter key
+        userInput.setOnAction(event -> handleUserInput());
     }
 
     @FXML
