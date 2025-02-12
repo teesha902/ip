@@ -41,6 +41,5 @@ public class ListCommandTest {
 
         assertEquals(expected, ListCommand.execute(taskList));
     }
-
 }
 

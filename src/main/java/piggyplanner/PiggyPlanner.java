@@ -49,7 +49,7 @@ public class PiggyPlanner {
 
         String[] inputParts = userInput.trim().split(" ", 2); // Split: command, arguments
         CommandType command = CommandType.fromString(inputParts[0]);
-
+        assert command != null : "Command type should never be null in processCommand()";
         validateArguments(command, inputParts);
 
         switch (command) {
@@ -57,11 +57,13 @@ public class PiggyPlanner {
             return ListCommand.execute(taskList.getAllTasks());
 
         case MARK:
+            assert inputParts.length == 2 : command + " should have an argument";
             String markResponse = Mark.execute(userInput, taskList.getAllTasks());
             Storage.updateList(taskList.getAllTasks());
             return markResponse;
 
         case UNMARK:
+            assert inputParts.length == 2 : command + " should have an argument";
             String unmarkResponse = Unmark.execute(userInput, taskList.getAllTasks());
             Storage.updateList(taskList.getAllTasks());
             return unmarkResponse;
@@ -82,14 +84,17 @@ public class PiggyPlanner {
             return eventResponse;
 
         case DELETE:
+            assert inputParts.length == 2 : command + " should have an argument";
             String deleteResponse = DeleteTask.execute(userInput, taskList.getAllTasks());
             Storage.updateList(taskList.getAllTasks());
             return deleteResponse;
 
         case FIND:
+            assert inputParts.length >= 2 : command + " should have an argument";
             return Find.execute(userInput, taskList.getAllTasks());
 
         case DAYPLAN:
+            assert inputParts.length >= 2 : command + " should have an argument";
             return DayPlan.execute(userInput, taskList.getAllTasks());
 
         case EXIT:
@@ -99,6 +104,7 @@ public class PiggyPlanner {
 
         case UNKNOWN:
         default:
+            assert false : "processCommand should never receive an UNKNOWN command";
             throw new PiggyException("Unfortunately, I don't know what that means. Please try again.");
         }
     }

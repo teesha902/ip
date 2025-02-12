@@ -26,6 +26,9 @@ public class AddTask {
      * @throws PiggyException If the task description is missing.
      */
     public static String todo(String userInput, ArrayList<Task> taskList) throws PiggyException {
+        assert userInput != null : "User input should never be null in AddTask.todo()";
+        assert taskList != null : "Task list should never be null in AddTask.todo()";
+
         if (userInput.length() <= 5) {
             throw new PiggyException("You forgot to mention what the task is.");
         }
@@ -33,6 +36,8 @@ public class AddTask {
         validateNonEmpty(taskName, "You forgot to mention what the task is.");
         Task newTask = new ToDo(taskName);
         taskList.add(newTask);
+
+        assert taskList.contains(newTask) : "Task should be successfully added to taskList in AddTask.todo()";
         return taskAddedMsg(newTask, taskList.size());
     }
 
@@ -45,6 +50,8 @@ public class AddTask {
      * @throws PiggyException If the task description or deadline is missing or incorrectly formatted.
      */
     public static String deadline(String userInput, ArrayList<Task> taskList) throws PiggyException {
+        assert userInput != null : "User input should never be null in AddTask.deadline()";
+        assert taskList != null : "Task list should never be null in AddTask.deadline()";
         if (!userInput.contains("/by")) {
             throw new PiggyException("You forgot to mention when the task is due.");
         }
@@ -56,8 +63,10 @@ public class AddTask {
 
         try {
             LocalDateTime dueDate = LocalDateTime.parse(dueDateStr, INPUT_FORMATTER);
+            assert dueDate != null : "Parsed dueDate should not be null";
             Task newTask = new Deadline(taskName, dueDate);
             taskList.add(newTask);
+            assert taskList.contains(newTask) : "Task should be successfully added to taskList in AddTask.deadline()";
             return taskAddedMsg(newTask, taskList.size());
         } catch (Exception e) {
             throw new PiggyException("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).");
@@ -73,6 +82,8 @@ public class AddTask {
      * @throws PiggyException If the task description, start time, or end time is missing or incorrectly formatted.
      */
     public static String event(String userInput, ArrayList<Task> taskList) throws PiggyException {
+        assert userInput != null : "User input should never be null in AddTask.event()";
+        assert taskList != null : "Task list should never be null in AddTask.event()";
         if (!userInput.contains("/from") || !userInput.contains("/to")) {
             throw new PiggyException("You forgot to mention when the event starts/ends.");
         }
@@ -88,8 +99,12 @@ public class AddTask {
         try {
             LocalDateTime startTime = LocalDateTime.parse(startTimeStr, INPUT_FORMATTER);
             LocalDateTime endTime = LocalDateTime.parse(endTimeStr, INPUT_FORMATTER);
+            if (!startTime.isBefore(endTime)) {
+                throw new PiggyException("Event start time must be before end time.");
+            }
             Task newTask = new Event(taskName, startTime, endTime);
             taskList.add(newTask);
+            assert taskList.contains(newTask) : "Task should be successfully added to taskList in AddTask.event()";
             return taskAddedMsg(newTask, taskList.size());
         } catch (Exception e) {
             throw new PiggyException("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).\n"

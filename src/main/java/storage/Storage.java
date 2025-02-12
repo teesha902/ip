@@ -122,6 +122,7 @@ public class Storage {
         } catch (Exception e) {
             throw new PiggyException("An error occurred while loading tasks: " + e.getMessage());
         }
+        assert taskList != null : "Task list should never be null after loading";
         return taskList;
     }
 
