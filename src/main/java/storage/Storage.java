@@ -20,30 +20,26 @@ import tasks.ToDo;
  * Provides methods to load, save, and ensure the file's existence.
  */
 public class Storage {
-
     private static final String FILE_PATH = "data/taskList.txt";
     private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
     /**
-     * Handles the storage and retrieval of tasks from a file.
-     * Provides methods to load, save, and ensure the file's existence.
+     * Ensures the task file and its parent directory exist.
      */
     private static void ensureFileExists() {
         try {
             File file = new File(FILE_PATH);
-            File parentDir = file.getParentFile(); // The "data" folder
+            File parentDir = file.getParentFile();
 
-            // Create the "data" folder if it doesn't exist
             if (!parentDir.exists()) {
                 parentDir.mkdirs();
             }
-            // Create the "taskList.txt" file if it doesn't exist
             if (!file.exists()) {
                 file.createNewFile();
             }
         } catch (Exception e) {
-            System.out.println("An error occurred while ensuring the file exists...\n" + e.getMessage());
+            System.out.println("An error occurred while ensuring the file exists: " + e.getMessage());
         }
     }
 
@@ -55,75 +51,109 @@ public class Storage {
      * @throws PiggyException If an error occurs while loading tasks from the file.
      */
     public static ArrayList<Task> loadList() throws PiggyException {
-        ArrayList<Task> taskList = new ArrayList<>();
         ensureFileExists();
-        //DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+        ArrayList<Task> taskList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String currLine;
 
             while ((currLine = reader.readLine()) != null) {
-                String[] taskParts = currLine.split(" \\| ");
-
-                if (taskParts.length < 3) {
-                    System.out.println("Warning: Skipping corrupted entry - " + currLine);
-                    continue; // Skip this line
+                Task task = parseTask(currLine);
+                if (task != null) {
+                    taskList.add(task);
                 }
-
-                String status = taskParts[0].trim();
-                boolean isDone = status.equals("X"); // "X" means done
-                String typeAndName = taskParts[1].trim();
-                if (!typeAndName.contains(":")) {
-                    System.out.println("Warning: Skipping malformed task entry - " + currLine);
-                    continue;
-                }
-                String[] typeSplit = typeAndName.split(":");
-                if (typeSplit.length < 2) {
-                    System.out.println("Warning: Skipping invalid task format - " + currLine);
-                    continue;
-                }
-                String type = typeSplit[0].trim();
-                String description = typeSplit[1].trim();
-                String timeInfo = taskParts[2].trim(); // Extract any time info
-
-                Task currTask;
-                if (type.equals("T")) {
-                    currTask = new ToDo(description, isDone);
-                } else if (type.equals("D")) {
-                    try {
-                        if (!timeInfo.startsWith("by: ")) {
-                            throw new PiggyException("Invalid time format - " + currLine);
-                        }
-                        String dateStr = timeInfo.substring(4).trim();
-                        LocalDateTime by = LocalDateTime.parse(dateStr, INPUT_FORMATTER);
-                        currTask = new Deadline(description, by, isDone);
-                    } catch (Exception e) {
-                        System.out.println("Warning: Skipping invalid deadline format - " + currLine);
-                        continue;
-                    }
-                } else if (type.equals("E")) { // Event
-                    try {
-                        if (!timeInfo.startsWith("from: ") || !timeInfo.contains(", to: ")) {
-                            throw new Exception();
-                        }
-                        String[] eventParts = timeInfo.split(", to: ");
-                        LocalDateTime from = LocalDateTime.parse(eventParts[0].substring(6).trim(), INPUT_FORMATTER);
-                        LocalDateTime to = LocalDateTime.parse(eventParts[1].trim(), INPUT_FORMATTER);
-                        currTask = new Event(description, from, to, isDone);
-                    } catch (Exception e) {
-                        System.out.println("Warning: Skipping invalid event format - " + currLine);
-                        continue;
-                    }
-                } else {
-                    throw new PiggyException("Unknown task type in file: " + type);
-                }
-                taskList.add(currTask);
             }
         } catch (Exception e) {
             throw new PiggyException("An error occurred while loading tasks: " + e.getMessage());
         }
+
         assert taskList != null : "Task list should never be null after loading";
         return taskList;
+    }
+
+    /**
+     * Parses a task entry from the file and reconstructs the corresponding Task object.
+     *
+     * @param line The line read from the file.
+     * @return A Task object or null if parsing fails.
+     */
+    private static Task parseTask(String line) {
+        String[] taskParts = line.split(" \\| ");
+        if (taskParts.length < 3) {
+            System.out.println("Warning: Skipping corrupted entry - " + line);
+            return null;
+        }
+
+        String status = taskParts[0].trim();
+        boolean isDone = status.equals("X");
+        String typeAndName = taskParts[1].trim();
+
+        if (!typeAndName.contains(":")) {
+            System.out.println("Warning: Skipping malformed task entry - " + line);
+            return null;
+        }
+
+        String[] typeSplit = typeAndName.split(":");
+        if (typeSplit.length < 2) {
+            System.out.println("Warning: Skipping invalid task format - " + line);
+            return null;
+        }
+
+        String type = typeSplit[0].trim();
+        String description = typeSplit[1].trim();
+        String timeInfo = taskParts[2].trim();
+
+        return createTask(type, description, timeInfo, isDone, line);
+    }
+
+    /**
+     * Creates a Task object based on the provided parameters.
+     *
+     * @param type        The task type (T, D, E).
+     * @param description The task description.
+     * @param timeInfo    The time information for Deadline/Event.
+     * @param isDone      Whether the task is marked as done.
+     * @param line        The original line from the file for error logging.
+     * @return A Task object or null if creation fails.
+     */
+    private static Task createTask(String type, String description, String timeInfo, boolean isDone, String line) {
+        try {
+            switch (type) {
+            case "T":
+                return new ToDo(description, isDone);
+            case "D":
+                return createDeadline(description, timeInfo, isDone, line);
+            case "E":
+                return createEvent(description, timeInfo, isDone, line);
+            default:
+                System.out.println("Warning: Unknown task type in file: " + type);
+                return null;
+            }
+        } catch (PiggyException e) {
+            System.out.println("Warning: Skipping invalid entry - " + line);
+            return null;
+        }
+    }
+
+    private static Task createDeadline(String description, String timeInfo, boolean isDone, String line)
+            throws PiggyException {
+        if (!timeInfo.startsWith("by: ")) {
+            throw new PiggyException("Invalid time format for deadline - " + line);
+        }
+        String dateStr = timeInfo.substring(4).trim();
+        LocalDateTime by = LocalDateTime.parse(dateStr, INPUT_FORMATTER);
+        return new Deadline(description, by, isDone);
+    }
+
+    private static Task createEvent(String description, String timeInfo, boolean isDone, String line)
+            throws PiggyException {
+        if (!timeInfo.startsWith("from: ") || !timeInfo.contains(", to: ")) {
+            throw new PiggyException("Invalid time format for event - " + line);
+        }
+        String[] eventParts = timeInfo.split(", to: ");
+        LocalDateTime from = LocalDateTime.parse(eventParts[0].substring(6).trim(), INPUT_FORMATTER);
+        LocalDateTime to = LocalDateTime.parse(eventParts[1].trim(), INPUT_FORMATTER);
+        return new Event(description, from, to, isDone);
     }
 
     /**
@@ -134,7 +164,7 @@ public class Storage {
      * @throws PiggyException If an error occurs while updating the file.
      */
     public static void updateList(ArrayList<Task> taskList) throws PiggyException {
-        ensureFileExists(); // Make sure the file exists before writing
+        ensureFileExists();
         File originalFile = new File(FILE_PATH);
         File backupFile = new File(FILE_PATH + ".bak");
 
@@ -145,38 +175,46 @@ public class Storage {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Task task : taskList) {
-                String status = task.status();
-                String type;
-                String timeInfo = "--"; // Default for ToDo tasks
-
-                if (task instanceof ToDo) {
-                    type = "T";
-                } else if (task instanceof Deadline) {
-                    type = "D";
-                    LocalDateTime dueDate = ((Deadline) task).getDueDate();
-                    timeInfo = "by: " + dueDate.format(OUTPUT_FORMATTER);
-                } else {
-                    type = "E";
-                    LocalDateTime startTime = ((Event) task).getStart();
-                    LocalDateTime endTime = ((Event) task).getEnd();
-                    timeInfo = "from: " + startTime.format(OUTPUT_FORMATTER)
-                            + ", to: " + endTime.format(OUTPUT_FORMATTER);
-                }
-
-                writer.write(status + " | " + type + ": " + task.getName() + " | " + timeInfo);
+                writer.write(formatTask(task));
                 writer.newLine();
             }
         } catch (Exception e) {
-            // Restore from backup if writing fails
             if (backupFile.exists()) {
                 backupFile.renameTo(originalFile);
             }
-            throw new PiggyException("An error occurred while updating the taskList: " + e.getMessage());
+            throw new PiggyException("An error occurred while updating the task list: " + e.getMessage());
         } finally {
-            // Delete backup file after successful save
             if (backupFile.exists()) {
                 backupFile.delete();
             }
         }
+    }
+
+    /**
+     * Formats a Task object into a string suitable for storage.
+     *
+     * @param task The task to format.
+     * @return A formatted string representation of the task.
+     */
+    private static String formatTask(Task task) {
+        String status = task.status();
+        String type;
+        String timeInfo = "--";
+
+        if (task instanceof ToDo) {
+            type = "T";
+        } else if (task instanceof Deadline) {
+            type = "D";
+            LocalDateTime dueDate = ((Deadline) task).getDueDate();
+            timeInfo = "by: " + dueDate.format(OUTPUT_FORMATTER);
+        } else if (task instanceof Event) {
+            type = "E";
+            LocalDateTime startTime = ((Event) task).getStart();
+            LocalDateTime endTime = ((Event) task).getEnd();
+            timeInfo = "from: " + startTime.format(OUTPUT_FORMATTER) + ", to: " + endTime.format(OUTPUT_FORMATTER);
+        } else {
+            return "";
+        }
+        return status + " | " + type + ": " + task.getName() + " | " + timeInfo;
     }
 }
