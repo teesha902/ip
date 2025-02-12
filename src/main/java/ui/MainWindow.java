@@ -3,22 +3,21 @@ package ui;
 import java.io.IOException;
 
 import exception.PiggyException;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import piggyplanner.PiggyPlanner;
-import javafx.application.Platform;
-import javafx.animation.PauseTransition;
 import javafx.util.Duration;
-
+import piggyplanner.PiggyPlanner;
 /**
  * MainWindow initializes and manages the graphical user interface (GUI) for PiggyPlanner.
  * It extends the JavaFX Application class and handles user interactions.

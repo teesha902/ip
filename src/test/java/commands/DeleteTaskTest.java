@@ -1,11 +1,13 @@
 package commands;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import exception.PiggyException;
 import tasks.Task;
 import tasks.ToDo;
@@ -28,7 +30,8 @@ public class DeleteTaskTest {
     void execute_nonIntegerIndex() {
         taskList.add(new ToDo("Buy groceries")); // Add at least 1 task
         PiggyException e = assertThrows(PiggyException.class, () -> DeleteTask.execute("delete one", taskList));
-        assertEquals("You need to pick a single index number to delete from the list. You can try again.", e.getMessage());
+        assertEquals("You need to pick a single index number to delete from the list. You can try again.",
+                e.getMessage());
     }
 
     @Test

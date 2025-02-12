@@ -1,8 +1,9 @@
 package commands;
 
+import java.util.ArrayList;
+
 import exception.PiggyException;
 import tasks.Task;
-import java.util.ArrayList;
 
 /**
  * Handles marking a task as completed in the task list.

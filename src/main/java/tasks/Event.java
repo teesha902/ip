@@ -1,10 +1,11 @@
 package tasks;
 
-import exception.PiggyException;
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
+
+import exception.PiggyException;
+
 
 /**
  * Represents an event task that has a start and end date/time.
@@ -24,7 +25,7 @@ public class Event extends Task {
      */
     public Event(String name, LocalDateTime start, LocalDateTime end) throws PiggyException {
         super(name);
-        if (!isValidTimeRange(start, end)) {
+        if (start.isAfter(end)) {
             throw new PiggyException("Event start time must be before end time.");
         }
         this.start = start;
@@ -42,23 +43,12 @@ public class Event extends Task {
      */
     public Event(String name, LocalDateTime start, LocalDateTime end, boolean isDone) throws PiggyException {
         super(name);
-        if (!isValidTimeRange(start, end)) {
+        if (start.isAfter(end)) {
             throw new PiggyException("Event start time must be before end time.");
         }
         this.start = start;
         this.end = end;
         this.isDone = isDone;
-    }
-
-    /**
-     * Validates that the event's start time is before the end time.
-     *
-     * @param start The start time of the event.
-     * @param end The end time of the event.
-     * @return True if start time is before end time, otherwise false.
-     */
-    private static boolean isValidTimeRange(LocalDateTime start, LocalDateTime end) {
-        return start.isBefore(end);
     }
 
     /**
