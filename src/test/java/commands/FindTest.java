@@ -1,12 +1,13 @@
 package commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import exception.PiggyException;
 import tasks.Deadline;
@@ -17,8 +18,8 @@ import tasks.ToDo;
 
 
 public class FindTest {
-    private ArrayList<Task> taskList;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private ArrayList<Task> taskList;
 
     @BeforeEach
     void setUp() throws PiggyException {
@@ -42,8 +43,8 @@ public class FindTest {
     void findMultipleMatches() {
         String result = Find.execute("find meeting report", taskList);
         String expected = "Here are the tasks I found related to the keywords: meeting, report:\n"
-                + "1. [D][ ] Submit report (by: 10/2/2025 23:59)\n"
-                + "2. [E][ ] Team meeting (from: 15/2/2025 10:00 to: 15/2/2025 12:00)";
+                + "1. [E][ ] Team meeting (from: saturday, feb 15 2025, 10:00am to: saturday, feb 15 2025, 12:00pm)\n"
+                + "2. [D][ ] Submit report (by: monday, feb 10 2025, 11:59pm)";
         assertEquals(expected, result);
     }
 
@@ -57,7 +58,7 @@ public class FindTest {
     void findWithMultipleKeywordsOneMatching() {
         String result = Find.execute("find groceries meeting", taskList);
         String expected = "Here are the tasks I found related to the keywords: groceries, meeting:\n"
-                + "1. [E][ ] Team meeting (from: 15/2/2025 10:00 to: 15/2/2025 12:00)";
+                + "1. [E][ ] Team meeting (from: saturday, feb 15 2025, 10:00am to: saturday, feb 15 2025, 12:00pm)";
         assertEquals(expected, result);
     }
 }

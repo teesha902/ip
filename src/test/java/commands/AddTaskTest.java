@@ -1,13 +1,15 @@
 package commands;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.BeforeEach;
-import tasks.Task;
-import exception.PiggyException;
 
 import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import exception.PiggyException;
+import tasks.Task;
 
 public class AddTaskTest {
     private ArrayList<Task> taskList;
@@ -20,8 +22,8 @@ public class AddTaskTest {
     @Test
     void validToDo() throws PiggyException {
         String response = AddTask.todo("todo Buy groceries", taskList);
-        assertEquals("New task incoming! I've added it to our list :)\n " +
-                "[T][ ] Buy groceries\nNow we have 1 task in the list.", response);
+        assertEquals("New task incoming! I've added it to our list :)\n "
+                + "[T][ ] Buy groceries\nNow we have 1 task in the list.", response);
     }
 
     @Test
@@ -35,8 +37,9 @@ public class AddTaskTest {
     @Test
     void validDeadlineInput() throws PiggyException {
         String response = AddTask.deadline("deadline Submit report /by 12/3/2025 1800", taskList);
-        assertEquals("New task incoming! I've added it to our list :)\n " +
-                "[D][ ] Submit report (by: wednesday, mar 12 2025, 6:00pm)\nNow we have 1 task in the list.", response);
+        assertEquals("New task incoming! I've added it to our list :)\n "
+                + "[D][ ] Submit report (by: wednesday, mar 12 2025, 6:00pm)"
+                + "\nNow we have 1 task in the list.", response);
     }
 
 
@@ -61,14 +64,16 @@ public class AddTaskTest {
         PiggyException thrown = assertThrows(PiggyException.class, () -> {
             AddTask.deadline("deadline Submit report /by 32/13/2025 1800", taskList);
         });
-        assertEquals("Invalid date format! Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).", thrown.getMessage());
+        assertEquals("Invalid date format! "
+                + "Try again and use: d/M/yyyy HHmm (e.g., 2/12/2019 1800).", thrown.getMessage());
     }
 
     @Test
     void validEventInput() throws PiggyException {
         String response = AddTask.event("event Team meeting /from 1/4/2025 0900 /to 1/4/2025 1100", taskList);
-        assertEquals("New task incoming! I've added it to our list :)\n " +
-                "[E][ ] Team meeting (from: tuesday, apr 01 2025, 9:00am to: tuesday, apr 01 2025, 11:00am)\nNow we have 1 task in the list.", response);
+        assertEquals("New task incoming! I've added it to our list :)\n "
+                + "[E][ ] Team meeting (from: tuesday, apr 01 2025, 9:00am to: tuesday, apr 01 2025, 11:00am)"
+                + "\nNow we have 1 task in the list.", response);
     }
 
     @Test

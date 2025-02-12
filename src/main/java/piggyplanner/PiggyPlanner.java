@@ -1,5 +1,7 @@
 package piggyplanner;
 
+import java.util.Scanner;
+
 import commands.AddTask;
 import commands.CommandType;
 import commands.DayPlan;
@@ -12,7 +14,7 @@ import exception.PiggyException;
 import storage.Storage;
 import tasks.TaskList;
 import ui.Ui;
-import java.util.Scanner;
+
 
 /**
  * The main class for the PiggyPlanner application.
@@ -41,6 +43,10 @@ public class PiggyPlanner {
      * @throws PiggyException If an invalid command or incorrect arguments are provided.
      */
     private String processCommand(String userInput) throws PiggyException {
+        assert userInput != null : "User input should never be null";
+        assert !userInput.trim().isEmpty() : "User input should never be empty";
+        assert taskList != null : "Task list should not be null when processing a command";
+
         String[] inputParts = userInput.trim().split(" ", 2); // Split: command, arguments
         CommandType command = CommandType.fromString(inputParts[0]);
 
@@ -81,8 +87,7 @@ public class PiggyPlanner {
             return deleteResponse;
 
         case FIND:
-            //return Find.execute(userInput, taskList.getAllTasks());
-            return Find.execute(taskList.getAllTasks(), inputParts[1].trim().split(" "));
+            return Find.execute(userInput, taskList.getAllTasks());
 
         case DAYPLAN:
             return DayPlan.execute(userInput, taskList.getAllTasks());
@@ -122,6 +127,8 @@ public class PiggyPlanner {
         while (true) {
             String userInput = reader.nextLine(); // Get user input from console
 
+            assert userInput != null : "User input should never be null when reading from console";
+
             try {
                 String response = processCommand(userInput);
                 Ui.showMessage(response);
@@ -148,60 +155,46 @@ public class PiggyPlanner {
      * @throws PiggyException if the provided arguments are incorrect or missing.
      */
     private void validateArguments(CommandType command, String[] inputParts) throws PiggyException {
+        assert command != null : "Command type should never be null in validateArguments";
         int argLength = inputParts.length; // Check number of arguments
 
         switch (command) {
         case LIST:
         case EXIT:
-            if (argLength != 1) {
-                throw new PiggyException("The '" + command.toString().toLowerCase()
-                        + "' command does not take any arguments.");
-            }
+            assert argLength == 1 : "LIST and EXIT commands should not have arguments";
             break;
 
         case MARK:
         case UNMARK:
         case DELETE:
-            if (argLength != 2) {
-                throw new PiggyException("The '" + command.toString().toLowerCase()
-                        + "' command requires exactly one task number.");
-            }
+            assert argLength == 2 : "MARK, UNMARK, and DELETE commands require exactly one argument";
             break;
         case FIND:
-            if (argLength < 2 || inputParts[1].trim().isEmpty()) {
-                throw new PiggyException("You forgot to tell me what keyword(s) to look for. Try again!");
-            }
+            assert argLength >= 2 : "FIND command should have at least one keyword";
             break;
 
         case TODO:
-            if (argLength != 2 || inputParts[1].trim().isEmpty()) {
-                throw new PiggyException("The 'todo' command requires a task description.");
-            }
+            assert argLength == 2 && !inputParts[1].trim().isEmpty()
+                    : "TODO command must have a valid task description";
             break;
 
         case DEADLINE:
-            if (argLength < 2 || !inputParts[1].contains("/by")) {
-                throw new PiggyException("The 'deadline' command requires a task description and a due date. "
-                        + "Format: deadline <task> /by <d/M/yyyy HHmm>");
-            }
+            assert argLength >= 2 && inputParts[1].contains("/by") : "DEADLINE command must have a valid date format";
             break;
 
         case EVENT:
-            if (argLength < 2 || !inputParts[1].contains("/from") || !inputParts[1].contains("/to")) {
-                throw new PiggyException("The 'event' command requires a task description, start date, and end date. "
-                        + "Format: event <task> /from <d/M/yyyy HHmm> /to <d/M/yyyy HHmm>");
-            }
+            assert argLength >= 2 && inputParts[1].contains("/from") && inputParts[1].contains("/to")
+                    : "EVENT command must have a valid start and end time";
             break;
 
         case DAYPLAN:
-            if (argLength != 2) {
-                throw new PiggyException("The 'agenda' command requires a valid date. Format: agenda for <d/M/yyyy>");
-            }
+            assert argLength == 2 : "DAYPLAN command requires a date argument";
             break;
 
         case UNKNOWN:
         default:
-            throw new PiggyException("Unknown command. Can you try again?");
+            assert false : "validateArguments should never receive an UNKNOWN command";
+            //throw new PiggyException("Unknown command. Can you try again?");
         }
     }
 

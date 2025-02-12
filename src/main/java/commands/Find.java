@@ -1,9 +1,10 @@
 package commands;
 
-import tasks.Task;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import tasks.Task;
 
 /**
  * Represents a command to find tasks in the task list that match one or more keywords.

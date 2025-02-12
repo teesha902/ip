@@ -1,8 +1,11 @@
 package commands;
 
-import tasks.Task;
-import exception.PiggyException;
 import java.util.ArrayList;
+
+import exception.PiggyException;
+import tasks.Task;
+
+
 
 /**
  * Handles deleting a task from the task list.
@@ -25,13 +28,14 @@ public class DeleteTask {
             Task currTask = taskList.get(taskIndex);
             taskList.remove(taskIndex);
             if (taskList.size() == 1) {
-                return "Phew! We got rid of " + currTask +
-                        "\nNow you only have 1 task to worry about.";
+                return "Phew! We got rid of " + currTask
+                        + "\nNow you only have 1 task to worry about.";
             }
-            return "Phew! We got rid of " + currTask +
-                    "\nNow you have " + taskList.size() + " tasks to worry about.";
+            return "Phew! We got rid of " + currTask
+                    + "\nNow you have " + taskList.size() + " tasks to worry about.";
         } catch (NumberFormatException e) {
-            throw new PiggyException("You need to pick a single index number to delete from the list. You can try again.");
+            throw new PiggyException("You need to pick a single index number "
+                    + "to delete from the list. You can try again.");
         }
     }
 }
