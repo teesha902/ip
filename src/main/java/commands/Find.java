@@ -18,6 +18,8 @@ public class Find {
      * @return A formatted string listing matching tasks or a message indicating no matches were found.
      */
     public static String execute(String userInput, ArrayList<Task> tasks) {
+        assert tasks != null : "Task list should never be null in Find.execute()";
+        assert userInput != null : "User input should never be null in Find.execute()";
         String[] keywords = extractKeywords(userInput);
         if (keywords.length == 0) {
             return handleNoKeywords();
@@ -33,8 +35,20 @@ public class Find {
      * @return An array of extracted keywords.
      */
     private static String[] extractKeywords(String userInput) {
-        String[] parts = userInput.trim().split(" ", 2);
-        return (parts.length < 2) ? new String[0] : parts[1].split("\\s+");
+        String[] inputParts = userInput.trim().split(" ", 2);
+        if (inputParts.length < 2 || inputParts[1].trim().isEmpty()) {
+            return new String[0]; // No keywords
+        }
+
+        String[] rawKeywords = inputParts[1].trim().split(" ");
+        ArrayList<String> keywordList = new ArrayList<>();
+
+        for (String word : rawKeywords) {
+            if (!word.isEmpty()) { // Ignore empty words
+                keywordList.add(word);
+            }
+        }
+        return keywordList.toArray(new String[0]);
     }
 
     /**
