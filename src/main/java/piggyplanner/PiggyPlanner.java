@@ -7,6 +7,7 @@ import commands.CommandType;
 import commands.DayPlan;
 import commands.DeleteTask;
 import commands.Find;
+import commands.Help;
 import commands.ListCommand;
 import commands.Mark;
 import commands.Unmark;
@@ -96,7 +97,8 @@ public class PiggyPlanner {
         case DAYPLAN:
             assert inputParts.length >= 2 : command + " should have an argument";
             return DayPlan.execute(userInput, taskList.getAllTasks());
-
+        case HELP:
+            return Help.execute();
         case EXIT:
             //Platform.exit();
             return "Goodbye! See you soon! 🐷";
