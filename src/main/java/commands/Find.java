@@ -1,8 +1,9 @@
 package commands;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import tasks.Task;
 
@@ -18,101 +19,85 @@ public class Find {
      * @return A formatted string listing matching tasks or a message indicating no matches were found.
      */
     public static String execute(String userInput, ArrayList<Task> tasks) {
-        assert tasks != null : "Task list should never be null in Find.execute()";
-        assert userInput != null : "User input should never be null in Find.execute()";
-        String[] keywords = extractKeywords(userInput);
-        if (keywords.length == 0) {
-            return handleNoKeywords();
-        }
-        Set<Task> matchedTasks = filterMatchingTasks(tasks, keywords);
-        return formatSearchResults(matchedTasks, keywords);
-    }
+        assert userInput != null : "User input should not be null in Find.execute()";
+        assert tasks != null : "Task list should not be null in Find.execute()";
 
-    /**
-     * Extracts keywords from the user input.
-     *
-     * @param userInput The full user command containing keywords.
-     * @return An array of extracted keywords.
-     */
-    private static String[] extractKeywords(String userInput) {
         String[] inputParts = userInput.trim().split(" ", 2);
         if (inputParts.length < 2 || inputParts[1].trim().isEmpty()) {
-            return new String[0]; // No keywords
+            return "You forgot to tell me what keyword(s) to look for. Try again!";
         }
-
+        /*
+        // Extract keywords and pass them as varargs
         String[] rawKeywords = inputParts[1].trim().split(" ");
         ArrayList<String> keywordList = new ArrayList<>();
 
         for (String word : rawKeywords) {
-            if (!word.isEmpty()) { // Ignore empty words
+            if (!word.isEmpty()) {
                 keywordList.add(word);
             }
         }
-        return keywordList.toArray(new String[0]);
+        String[] keywords = keywordList.toArray(new String[0]);
+        */
+        // Extract keywords as a List (filters out any empty words)
+        List<String> keywords = extractKeywords(inputParts[1]);
+        return processKeywords(tasks, keywords);
     }
 
     /**
-     * Returns a message when no keywords are provided.
-     *
-     * @return An error message prompting the user to enter keywords.
-     */
-    private static String handleNoKeywords() {
-        return "You forgot to tell me what keyword(s) to look for. Try again!";
-    }
-
-    /**
-     * Filters tasks based on matching keywords.
+     * Processes the search for tasks containing any of the provided keywords.
      *
      * @param tasks The list of tasks.
      * @param keywords The keywords to search for.
-     * @return A set of tasks that contain at least one of the keywords.
+     * @return The formatted search results.
      */
-    private static Set<Task> filterMatchingTasks(ArrayList<Task> tasks, String... keywords) { // Using varargs here
-        Set<Task> matchedTasks = new HashSet<>();
-        for (Task task : tasks) {
-            if (taskMatchesKeywords(task, keywords)) {
-                matchedTasks.add(task);
-            }
-        }
-        return matchedTasks;
+    private static String processKeywords(ArrayList<Task> tasks, List<String> keywords) {
+        assert !keywords.isEmpty() : "Keyword list should not be empty in Find.processKeywords()";
+
+        // Stream-based filtering of matching tasks
+        Set<Task> matchingTasks = tasks.stream()
+                .filter(task -> taskMatchesKeywords(task, keywords))
+                .collect(Collectors.toSet());
+
+        return formatResults(matchingTasks, keywords);
     }
 
     /**
-     * Checks if a task's name contains any of the given keywords.
-     *
-     * @param task The task to check.
-     * @param keywords The keywords to search for.
-     * @return True if the task name contains any of the keywords, false otherwise.
+     * Checks if a task's name contains any of the provided keywords (case-insensitive).
      */
-    private static boolean taskMatchesKeywords(Task task, String[] keywords) {
+    private static boolean taskMatchesKeywords(Task task, List<String> keywords) {
         String taskNameLower = task.getName().toLowerCase();
-        for (String keyword : keywords) {
-            if (taskNameLower.contains(keyword.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
+
+        return keywords.stream()
+                .map(keyword -> keyword.toLowerCase())
+                .anyMatch(keyword -> taskNameLower.contains(keyword));
     }
 
     /**
-     * Formats the search results into a user-friendly string.
-     *
-     * @param matchedTasks The set of tasks that match the keywords.
-     * @param keywords The keywords that were searched for.
-     * @return A formatted string listing the matching tasks.
+     * Extracts keywords from a string (splits by spaces, removes empties).
      */
-    private static String formatSearchResults(Set<Task> matchedTasks, String[] keywords) {
-        if (matchedTasks.isEmpty()) {
+    private static List<String> extractKeywords(String input) {
+        return List.of(input.split(" ")).stream()
+                .filter(word -> !word.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Formats the result string based on matching tasks.
+     */
+    private static String formatResults(Set<Task> matchingTasks, List<String> keywords) {
+        if (matchingTasks.isEmpty()) {
             return "I couldn't find any tasks related to the keywords: \""
                     + String.join("\", \"", keywords) + "\".\nTry different ones!";
         }
+
         StringBuilder result = new StringBuilder("Here are the tasks I found related to the keywords: "
                 + String.join(", ", keywords) + ":\n");
+
         int count = 1;
-        for (Task task : matchedTasks) {
+        for (Task task : matchingTasks) {
             result.append(count++).append(". ").append(task).append("\n");
         }
+
         return result.toString().trim();
     }
 }
-
