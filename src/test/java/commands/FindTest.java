@@ -65,4 +65,10 @@ public class FindTest {
         assertEquals(expected, result);
     }
      */
+
+    @Test
+    void findWithoutKeywords() {
+        String result = Find.execute("find", taskList);
+        assertEquals("You forgot to tell me what keyword(s) to look for. Try again!", result);
+    }
 }
