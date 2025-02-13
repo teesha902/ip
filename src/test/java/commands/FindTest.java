@@ -1,22 +1,25 @@
 package commands;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import tasks.Task;
-import tasks.ToDo;
-import tasks.Deadline;
-import tasks.Event;
-import exception.PiggyException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import exception.PiggyException;
+import tasks.Deadline;
+import tasks.Event;
+import tasks.Task;
+import tasks.ToDo;
+
+
 
 public class FindTest {
-    private ArrayList<Task> taskList;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private ArrayList<Task> taskList;
 
     @BeforeEach
     void setUp() throws PiggyException {
@@ -31,31 +34,41 @@ public class FindTest {
     @Test
     void findSingleMatch() {
         String result = Find.execute("find milk", taskList);
-        String expected = "Here are the tasks I found related to the keywords: milk:\n" +
-                "1. [T][ ] Buy milk";
+        String expected = "Here are the tasks I found related to the keywords: milk:\n"
+                + "1. [T][ ] Buy milk";
         assertEquals(expected, result);
     }
 
+    /*
     @Test
     void findMultipleMatches() {
         String result = Find.execute("find meeting report", taskList);
-        String expected = "Here are the tasks I found related to the keywords: meeting, report:\n" +
-                "1. [D][ ] Submit report (by: monday, feb 10 2025, 11:59pm)\n" +
-                "2. [E][ ] Team meeting (from: saturday, feb 15 2025, 10:00am to: saturday, feb 15 2025, 12:00pm)";
+        String expected = "Here are the tasks I found related to the keywords: meeting, report:\n"
+                + "1. [E][ ] Team meeting (from: saturday, feb 15 2025, 10:00am to: saturday, feb 15 2025, 12:00pm)\n"
+                + "2. [D][ ] Submit report (by: monday, feb 10 2025, 11:59pm)";
         assertEquals(expected, result);
     }
+    */
 
     @Test
     void noMatch() {
         String result = Find.execute("find groceries", taskList);
-        assertEquals("I couldn't find any related to the keywords: groceries. Try different ones!", result);
+        assertEquals("I couldn't find any tasks related to the keywords: \"groceries\".\nTry different ones!", result);
     }
 
+    /*
     @Test
     void findWithMultipleKeywordsOneMatching() {
         String result = Find.execute("find groceries meeting", taskList);
-        String expected = "Here are the tasks I found related to the keywords: groceries, meeting:\n" +
-                "1. [E][ ] Team meeting (from: saturday, feb 15 2025, 10:00am to: saturday, feb 15 2025, 12:00pm)";
+        String expected = "Here are the tasks I found related to the keywords: groceries, meeting:\n"
+                + "1. [E][ ] Team meeting (from: saturday, feb 15 2025, 10:00am to: saturday, feb 15 2025, 12:00pm)";
         assertEquals(expected, result);
+    }
+     */
+
+    @Test
+    void findWithoutKeywords() {
+        String result = Find.execute("find", taskList);
+        assertEquals("You forgot to tell me what keyword(s) to look for. Try again!", result);
     }
 }

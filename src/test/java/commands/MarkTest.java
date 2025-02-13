@@ -1,15 +1,18 @@
 package commands;
 
-import exception.PiggyException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import tasks.Task;
-import tasks.ToDo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import exception.PiggyException;
+import tasks.Task;
+import tasks.ToDo;
+
+
 
 public class MarkTest {
     private ArrayList<Task> taskList;
@@ -51,9 +54,8 @@ public class MarkTest {
     @Test
     void execute_markSuccess() throws PiggyException {
         taskList.add(new ToDo("Buy pen"));
-        assertEquals("Good work! Let's keep going." +
-                "\nI've marked this task as done:\n  [T][X] Buy pen",
+        assertEquals("Good work! Let's keep going."
+                        + "\nI've marked this task as done:\n  [T][X] Buy pen",
                 Mark.execute("mark 1", taskList));
     }
-
 }

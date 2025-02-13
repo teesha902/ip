@@ -1,8 +1,9 @@
 package commands;
 
+import java.util.ArrayList;
+
 import exception.PiggyException;
 import tasks.Task;
-import java.util.ArrayList;
 
 /**
  * Handles unmarking a task in the task list.

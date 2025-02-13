@@ -1,7 +1,8 @@
 package commands;
 
-import tasks.Task;
 import java.util.ArrayList;
+
+import tasks.Task;
 
 /**
  * Handles displaying all tasks in the list.
@@ -15,11 +16,11 @@ public class ListCommand {
      */
     public static String execute(ArrayList<Task> taskList) {
         if (taskList.isEmpty()) {
-            return "You have no tasks at the moment. Yay!.";
+            return "You have no tasks at the moment. Yay!";
         }
         StringBuilder fullList = new StringBuilder("Here is our to-do list:\n");
         for (int i = 0; i < taskList.size(); i++) {
-            fullList.append(String.format("%d. 📌 %s\n", i + 1, taskList.get(i).toString()));
+            fullList.append(String.format("%d. %s\n", i + 1, taskList.get(i).toString()));
 
         }
         return fullList.toString().trim();

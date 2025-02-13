@@ -1,18 +1,17 @@
 package tasks;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
-import exception.PiggyException;
-
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import org.junit.jupiter.api.Test;
+
+import exception.PiggyException;
 
 public class EventTest {
     private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-    //private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy, h:mma");
-    //private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMM dd yyyy");
 
     @Test
     public void constructor_invalidTimeRange_throwsException() {
