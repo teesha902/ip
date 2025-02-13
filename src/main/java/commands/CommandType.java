@@ -12,6 +12,7 @@ public enum CommandType {
     EVENT,
     DELETE,
     DAYPLAN,
+    HELP,
     FIND,
     EXIT,
     UNKNOWN; // For unrecognized commands
@@ -40,6 +41,8 @@ public enum CommandType {
             return DELETE;
         case "agenda":
             return DAYPLAN;
+        case "help":
+            return HELP;
         case "find":
             return FIND;
         case "bye":
