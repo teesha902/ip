@@ -72,6 +72,8 @@ public class DialogBox extends HBox {
         //Image userImage = new Image(DialogBox.class.getResourceAsStream("/images/user.png"));
         DialogBox dialogBox = new DialogBox(message, userImage);
         dialogBox.setAlignment(Pos.TOP_RIGHT); //Ensure alignment to the right
+        dialogBox.text.setStyle("-fx-background-color: #FFE5EA; -fx-padding: 10; "
+                + "-fx-border-radius: 10; -fx-background-radius: 10;");
         return dialogBox;
     }
 
@@ -87,8 +89,8 @@ public class DialogBox extends HBox {
         DialogBox dialogBox = new DialogBox(message, piggyImage);
         dialogBox.flip();
         //lighter pink for piggy responses
-        dialogBox.text.setStyle("-fx-background-color: #ffe5ec; -fx-padding: 10; -fx-border-radius: 10; "
-                + "-fx-background-radius: 10;");
+        dialogBox.text.setStyle("-fx-background-color: #ffccd5; -fx-padding: 10;"
+                + " -fx-border-radius: 10; -fx-background-radius: 10;");
         return dialogBox;
     }
 }
