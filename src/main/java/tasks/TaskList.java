@@ -32,4 +32,20 @@ public class TaskList {
     public ArrayList<Task> getAllTasks() {
         return tasks;
     }
+
+    /**
+     * Checks if a task with the same description and relevant time details
+     * (if applicable) already exists in the task list.
+     *
+     * @param newTask The task to check for duplicates.
+     * @return true if a task with the same details exists; false otherwise.
+     */
+    public boolean isDuplicateTask(Task newTask) {
+        for (Task task : tasks) {
+            if (task.equals(newTask)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

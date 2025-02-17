@@ -61,4 +61,25 @@ public class Task {
     public String toString() {
         return "[" + this.status() + "] " + this.name;
     }
+
+    /**
+     * Compares this task with another object to determine equality.
+     * Two tasks are considered equal if they have the same description (name),
+     * regardless of their type or completion status.
+     *
+     * @param obj The object to compare with this task.
+     * @return true if the object is a Task with the same description; false otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Task task = (Task) obj;
+        return this.name.equals(task.name);
+    }
 }
+
