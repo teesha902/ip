@@ -1,5 +1,8 @@
 package ui;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -8,7 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+
 
 
 /**
@@ -38,6 +43,14 @@ public class DialogBox extends HBox {
         text.setStyle("-fx-background-color: #ffccd5; -fx-padding: 10; -fx-border-radius: 10; "
                 + "-fx-background-radius: 10;");
 
+        // Add timestamp (current time)
+        String timestamp = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a"));
+        Label timestampLabel = new Label(timestamp);
+        timestampLabel.setStyle("-fx-text-fill: grey; -fx-font-size: 10;");
+
+        // Group message + timestamp vertically
+        VBox messageWithTimestamp = new VBox(text, timestampLabel);
+        messageWithTimestamp.setSpacing(2);
         // Create a circular clip for the image
         Circle clip = new Circle(25, 21, 13.5); // x, y, radius
         displayPicture.setClip(clip); // Apply circular mask
@@ -46,7 +59,7 @@ public class DialogBox extends HBox {
         this.setSpacing(2);
         this.setMaxWidth(Double.MAX_VALUE); //Allow the dialog box to take full width
 
-        this.getChildren().addAll(text, displayPicture); // Add message and image
+        this.getChildren().addAll(messageWithTimestamp, displayPicture); // Add message, image and timestamp
     }
     /**
      * Flips the dialog box alignment to the left, for PiggyPlanner responses.
@@ -72,6 +85,8 @@ public class DialogBox extends HBox {
         //Image userImage = new Image(DialogBox.class.getResourceAsStream("/images/user.png"));
         DialogBox dialogBox = new DialogBox(message, userImage);
         dialogBox.setAlignment(Pos.TOP_RIGHT); //Ensure alignment to the right
+        dialogBox.text.setStyle("-fx-background-color: #FFE5EA; -fx-padding: 10; "
+                + "-fx-border-radius: 10; -fx-background-radius: 10;");
         return dialogBox;
     }
 
@@ -87,8 +102,8 @@ public class DialogBox extends HBox {
         DialogBox dialogBox = new DialogBox(message, piggyImage);
         dialogBox.flip();
         //lighter pink for piggy responses
-        dialogBox.text.setStyle("-fx-background-color: #ffe5ec; -fx-padding: 10; -fx-border-radius: 10; "
-                + "-fx-background-radius: 10;");
+        dialogBox.text.setStyle("-fx-background-color: #ffccd5; -fx-padding: 10;"
+                + " -fx-border-radius: 10; -fx-background-radius: 10;");
         return dialogBox;
     }
 }
