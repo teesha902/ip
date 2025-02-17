@@ -35,6 +35,9 @@ public class AddTask {
         String taskName = userInput.substring(5).trim();
         validateNonEmpty(taskName, "You forgot to mention what the task is.");
         Task newTask = new ToDo(taskName);
+        if (isDuplicate(newTask, taskList)) {
+            throw new PiggyException("This task already exists in your list!");
+        }
         taskList.add(newTask);
 
         assert taskList.contains(newTask) : "Task should be successfully added to taskList in AddTask.todo()";
@@ -65,6 +68,9 @@ public class AddTask {
             LocalDateTime dueDate = LocalDateTime.parse(dueDateStr, INPUT_FORMATTER);
             assert dueDate != null : "Parsed dueDate should not be null";
             Task newTask = new Deadline(taskName, dueDate);
+            if (isDuplicate(newTask, taskList)) {
+                throw new PiggyException("This deadline already exists in your list!");
+            }
             taskList.add(newTask);
             assert taskList.contains(newTask) : "Task should be successfully added to taskList in AddTask.deadline()";
             return taskAddedMsg(newTask, taskList.size());
@@ -103,6 +109,9 @@ public class AddTask {
                 throw new PiggyException("Event start time must be before end time.");
             }
             Task newTask = new Event(taskName, startTime, endTime);
+            if (isDuplicate(newTask, taskList)) {
+                throw new PiggyException("This event already exists in your list!");
+            }
             taskList.add(newTask);
             assert taskList.contains(newTask) : "Task should be successfully added to taskList in AddTask.event()";
             return taskAddedMsg(newTask, taskList.size());
@@ -142,6 +151,23 @@ public class AddTask {
         }
         // Return the final success message
         return "New task incoming! I've added it to our list :)\n " + task + "\n" + taskCountMessage;
+    }
+
+    /**
+     * Checks if a task with the same description and relevant time details
+     * (if applicable) already exists in the provided task list.
+     *
+     * @param newTask  The task to check for duplicates.
+     * @param taskList The list of tasks to search for duplicates.
+     * @return true if a task with the same details exists in the list; false otherwise.
+     */
+    private static boolean isDuplicate(Task newTask, ArrayList<Task> taskList) {
+        for (Task task : taskList) {
+            if (task.equals(newTask)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

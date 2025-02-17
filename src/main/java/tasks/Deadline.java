@@ -62,4 +62,20 @@ public class Deadline extends Task {
     public String toString() {
         return "[D]" + super.toString() + " (by: " + dueDate.format(OUTPUT_FORMATTER).toLowerCase() + ")";
     }
+
+    /**
+     * Compares this deadline with another object to determine equality.
+     * Two deadlines are considered equal if they have the same description and due date.
+     *
+     * @param obj The object to compare with this deadline.
+     * @return true if the object is a Deadline with the same description and due date; false otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj)) {
+            return false;
+        }
+        Deadline deadline = (Deadline) obj;
+        return this.dueDate.equals(deadline.dueDate);
+    }
 }

@@ -98,4 +98,21 @@ public class Event extends Task {
         return "[E]" + super.toString() + " (from: " + start.format(OUTPUT_FORMATTER).toLowerCase()
                 + " to: " + end.format(OUTPUT_FORMATTER).toLowerCase() + ")";
     }
+
+    /**
+     * Compares this event with another object to determine equality.
+     * Two events are considered equal if they have the same description,
+     * start time, and end time.
+     *
+     * @param obj The object to compare with this event.
+     * @return true if the object is an Event with the same description, start time, and end time; false otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj)) {
+            return false;
+        }
+        Event event = (Event) obj;
+        return this.start.equals(event.start) && this.end.equals(event.end);
+    }
 }
