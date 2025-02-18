@@ -67,7 +67,7 @@ A To-Do task is the simplest task type with just a description.
 Adds a task with a deadline.
 
 **Format:** `deadline TASK_DESCRIPTION /by d/M/yyyy HHmm`
-**Example:** `deadline Submit assignment /by 25/2/2025 2359
+**Example:** `deadline Submit assignment /by 25/2/2025 2359`
 
 *Note:*
 - Date and time must follow the **`d/M/yyyy HHmm`** format (e.g., 25/2/2025 2359).
