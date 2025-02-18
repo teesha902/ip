@@ -23,5 +23,6 @@ public class Help {
                 + "10. help - Show this help message\n"
                 + "11. bye - Exit PiggyPlanner\n\n"
                 + "For the full User Guide, visit:\n"
-                + "👉 [User Guide](https://teesha902.github.io/ip/)";}
+                + "👉 https://teesha902.github.io/ip/";
+    }
 }
