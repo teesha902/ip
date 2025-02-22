@@ -61,6 +61,10 @@ public class MainWindow extends Application {
             stage.setTitle("PiggyPlanner 🐷");
             stage.setScene(scene);
 
+            //Set  initial window size
+            stage.setWidth(400);
+            stage.setHeight(600);
+
             // define minimum window size when resizing
             stage.setMinWidth(400);
             stage.setMinHeight(600);
